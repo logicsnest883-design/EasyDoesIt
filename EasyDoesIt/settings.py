@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-lqw$-4g#p0(=b931v7c$fjrawdp$g*t6vcl@3)m^rr6$*#kxwd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["easydoesit-production.up.railway.app"]
 
 
 # Application definition
@@ -71,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'easydoesit-production.up.railway.app'
             ],
         },
     },
