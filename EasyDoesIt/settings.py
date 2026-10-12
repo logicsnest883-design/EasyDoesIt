@@ -28,6 +28,13 @@ DEBUG = True
 ALLOWED_HOSTS = ["easydoesit-production.up.railway.app"]
 
 
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "easydoesit-production.up.railway.app",
+]
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -71,7 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                
+
             ],
         },
     },
