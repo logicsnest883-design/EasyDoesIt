@@ -31,8 +31,10 @@ ALLOWED_HOSTS = ["easydoesit-production.up.railway.app"]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "easydoesit-production.up.railway.app",
+    "https://easydoesit-production.up.railway.app",
 ]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 # Application definition
