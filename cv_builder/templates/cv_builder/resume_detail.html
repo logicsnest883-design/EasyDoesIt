@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}{{ resume.full_name }} | EasyDoesIt{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-6">
+    <p class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">{{ resume.get_template_display }} Template</p>
+    {% if resume.photo %}
+    <img src="{{ resume.photo.url }}" alt="{{ resume.full_name }}" class="w-24 h-24 rounded-full object-cover mb-4">
+{% endif %}
+    <h1 class="text-2xl font-bold">{{ resume.full_name }}</h1>
+    <p class="text-gray-600">{{ resume.email }} {% if resume.phone %}· {{ resume.phone }}{% endif %}</p>
+    {% if resume.address %}<p class="text-gray-500 text-sm">{{ resume.address }}</p>{% endif %}
+
+    {% if resume.summary %}
+    <div class="mt-4">
+        <h2 class="font-semibold">Summary</h2>
+        <p class="text-gray-700">{{ resume.summary }}</p>
+    </div>
+    {% endif %}
+        <!-- Education -->
+    <div class="mt-6">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold">Education</h2>
+            <a href="{% url 'education_add' resume.pk %}" class="text-sm text-blue-600 hover:underline">+ Add</a>
+        </div>
+        {% for edu in resume.education.all %}
+            <div class="border-t py-2 flex justify-between items-start">
+                <div>
+                    <p class="font-medium">{{ edu.qualification }} — {{ edu.institution }}</p>
+                    <p class="text-sm text-gray-500">
+                        {{ edu.start_date|default:"" }} - {% if edu.is_current %}Present{% else %}{{ edu.end_date|default:"" }}{% endif %}
+                    </p>
+                    {% if edu.description %}<p class="text-sm text-gray-700 mt-1">{{ edu.description }}</p>{% endif %}
+                </div>
+                <div class="flex gap-2 text-sm shrink-0 ml-4">
+                    <a href="{% url 'education_edit' resume.pk edu.pk %}" class="text-blue-600 hover:underline">Edit</a>
+                    <form method="post" action="{% url 'education_delete' resume.pk edu.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-sm text-gray-400 mt-2">No education added yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Experience -->
+    <div class="mt-6">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold">Experience</h2>
+            <a href="{% url 'experience_add' resume.pk %}" class="text-sm text-blue-600 hover:underline">+ Add</a>
+        </div>
+        {% for exp in resume.experience.all %}
+            <div class="border-t py-2 flex justify-between items-start">
+                <div>
+                    <p class="font-medium">{{ exp.job_title }} — {{ exp.company }}</p>
+                    <p class="text-sm text-gray-500">
+                        {{ exp.start_date|default:"" }} - {% if exp.is_current %}Present{% else %}{{ exp.end_date|default:"" }}{% endif %}
+                    </p>
+                    {% if exp.description %}<p class="text-sm text-gray-700 mt-1">{{ exp.description }}</p>{% endif %}
+                </div>
+                <div class="flex gap-2 text-sm shrink-0 ml-4">
+                    <a href="{% url 'experience_edit' resume.pk exp.pk %}" class="text-blue-600 hover:underline">Edit</a>
+                    <form method="post" action="{% url 'experience_delete' resume.pk exp.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-sm text-gray-400 mt-2">No experience added yet.</p>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'resume_list' %}" class="inline-block mt-6 text-blue-600 hover:underline">← Back to all resumes</a>
+</div>
+{% endblock %}

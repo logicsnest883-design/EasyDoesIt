@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page_title }} | EasyDoesIt
+{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-10">
+
+```
+<div class="mx-auto max-w-2xl">
+
+    <a
+        href="{% url 'finance:transactions' %}"
+        class="text-sm font-semibold text-indigo-600 hover:text-indigo-700"
+    >
+        ← Transactions
+    </a>
+
+
+    <div class="mt-5 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+
+        <div
+            class="
+                px-6 py-8 sm:px-8
+                {% if transaction_type == 'income' %}
+                    bg-gradient-to-br from-emerald-600 to-emerald-700
+                {% else %}
+                    bg-gradient-to-br from-rose-600 to-rose-700
+                {% endif %}
+            "
+        >
+
+            <div class="flex items-center gap-4">
+
+                <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-white">
+
+                    {% if transaction_type == "income" %}
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="h-7 w-7"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M12 19V5m0 0l-5 5m5-5l5 5"/>
+
+                        </svg>
+
+                    {% else %}
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="h-7 w-7"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M12 5v14m0 0l5-5m-5 5l-5-5"/>
+
+                        </svg>
+
+                    {% endif %}
+
+                </div>
+
+                <div>
+
+                    <p class="text-sm font-semibold text-white/80">
+                        Money Manager
+                    </p>
+
+                    <h1 class="mt-1 text-3xl font-bold text-white">
+                        {{ page_title }}
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="p-6 sm:p-8">
+
+            <form method="post" class="space-y-6">
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+
+                        {{ form.non_field_errors }}
+
+                    </div>
+
+                {% endif %}
+
+
+                <div>
+
+                    <label
+                        for="{{ form.account.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Account
+                    </label>
+
+                    {{ form.account }}
+
+                    {% if form.account.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.account.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                    <p class="mt-2 text-xs text-slate-400">
+                        Choose where this money was received or spent.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        for="{{ form.category.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Category
+                    </label>
+
+                    {{ form.category }}
+
+                    {% if form.category.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.category.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        for="{{ form.amount.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Amount
+                    </label>
+
+                    <div class="relative">
+
+                        <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-400">
+                            K
+                        </span>
+
+                        <div>
+                            {{ form.amount }}
+                        </div>
+
+                    </div>
+
+                    {% if form.amount.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.amount.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        for="{{ form.description.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Description
+                    </label>
+
+                    {{ form.description }}
+
+                    {% if form.description.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.description.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        for="{{ form.payment_method.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Payment Method
+                    </label>
+
+                    {{ form.payment_method }}
+
+                    {% if form.payment_method.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.payment_method.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        for="{{ form.transaction_date.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Date
+                    </label>
+
+                    {{ form.transaction_date }}
+
+                    {% if form.transaction_date.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.transaction_date.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        for="{{ form.notes.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Notes
+                    </label>
+
+                    {{ form.notes }}
+
+                    {% if form.notes.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.notes.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-6 sm:flex-row sm:justify-end">
+
+                    <a
+                        href="{% url 'finance:transactions' %}"
+                        class="inline-flex items-center justify-center rounded-xl border border-slate-200 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                    >
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="
+                            inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-sm transition
+                            {% if transaction_type == 'income' %}
+                                bg-emerald-600 hover:bg-emerald-700
+                            {% else %}
+                                bg-rose-600 hover:bg-rose-700
+                            {% endif %}
+                        "
+                    >
+                        {{ submit_text }}
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+{% endblock %}

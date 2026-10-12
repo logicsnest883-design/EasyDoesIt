@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+    body { margin: 0; padding: 0; background: #fff; }
+
+    .classic-cv {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #fffefa;
+        overflow: hidden;
+        color: #292524;
+        font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .classic-header { padding: 52px 60px 38px; text-align: center; position: relative; }
+    .classic-template-label { font-family: Arial, sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: #a08b68; margin-bottom: 22px; }
+
+    .classic-photo {
+        width: 105px; height: 105px; border-radius: 50%; object-fit: cover; display: block;
+        margin: 0 auto 22px; filter: grayscale(100%);
+        border: 5px solid #fffefa; outline: 1px solid #b8aa91; outline-offset: 5px;
+    }
+
+    .classic-name { margin: 0; color: #211f1c; font-size: 39px; font-weight: 500; line-height: 1.05; letter-spacing: 0.12em; text-transform: uppercase; }
+    .classic-name-rule { width: 55px; height: 2px; background: #a08b68; margin: 18px auto 14px; }
+
+    .classic-contact { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; color: #57534e; font-family: Arial, sans-serif; font-size: 10px; line-height: 1.6; }
+    .classic-contact-item { display: inline-flex; align-items: center; }
+    .classic-contact-item:not(:last-child)::after { content: "•"; color: #a08b68; margin: 0 10px; }
+
+    .classic-header-border { margin: 0 60px; border-top: 1px solid #292524; border-bottom: 1px solid #b8aa91; height: 5px; }
+
+    .classic-body { display: grid; grid-template-columns: 30% 70%; }
+
+    .classic-sidebar { background: #f4f1ea; padding: 38px 30px 45px; border-right: 1px solid #d6d0c5; }
+    .classic-main { padding: 38px 48px 50px; }
+
+    .classic-section { margin-bottom: 31px; }
+    .classic-section:last-child { margin-bottom: 0; }
+    .classic-section-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .classic-section-heading h2 { margin: 0; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; white-space: nowrap; }
+    .classic-section-heading::after { content: ""; flex: 1; border-top: 1px solid #b8aa91; }
+    .classic-sidebar .classic-section-heading h2 { font-size: 10px; }
+
+    .classic-about, .classic-summary { color: #44403c; font-size: 11px; line-height: 1.85; margin: 0; }
+
+    .classic-contact-block { margin-bottom: 13px; }
+    .classic-small-label { color: #a08b68; font-family: Arial, sans-serif; font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 3px; }
+    .classic-small-value { color: #44403c; font-family: Arial, sans-serif; font-size: 10px; line-height: 1.55; word-break: break-word; }
+
+    .classic-skill { margin-bottom: 12px; }
+    .classic-skill-top { display: flex; justify-content: space-between; align-items: center; gap: 5px; margin-bottom: 5px; }
+    .classic-skill-name { color: #292524; font-family: Arial, sans-serif; font-size: 9.5px; font-weight: 600; }
+    .classic-skill-level { color: #78716c; font-family: Arial, sans-serif; font-size: 7.5px; }
+    .classic-skill-track { height: 3px; background: #d9d4ca; width: 100%; }
+    .classic-skill-fill { height: 100%; background: #292524; }
+    .classic-skill-fill.expert { width: 100%; }
+    .classic-skill-fill.advanced { width: 82%; }
+    .classic-skill-fill.intermediate { width: 62%; }
+    .classic-skill-fill.beginner { width: 38%; }
+    .classic-skill-fill.default { width: 70%; }
+
+    .classic-list { list-style: none; margin: 0; padding: 0; }
+    .classic-list-item { color: #44403c; font-family: Arial, sans-serif; font-size: 9.5px; line-height: 1.5; padding: 6px 0; border-bottom: 1px solid #ddd8ce; }
+    .classic-list-item:last-child { border-bottom: none; }
+    .classic-list-item strong { color: #292524; }
+
+    .classic-hobbies { display: flex; flex-wrap: wrap; gap: 6px; }
+    .classic-hobby { border: 1px solid #c8bda9; padding: 5px 8px; color: #57534e; font-family: Arial, sans-serif; font-size: 8px; }
+
+    .classic-main-section { margin-bottom: 38px; }
+    .classic-main-section:last-child { margin-bottom: 0; }
+    .classic-entry { margin-bottom: 27px; position: relative; }
+    .classic-entry:last-child { margin-bottom: 0; }
+    .classic-entry-header { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: baseline; }
+    .classic-entry-title { margin: 0; color: #292524; font-size: 13px; font-weight: 700; line-height: 1.4; }
+    .classic-entry-date { color: #78716c; font-family: Arial, sans-serif; font-size: 8.5px; font-weight: 600; white-space: nowrap; text-align: right; }
+    .classic-entry-company { color: #8b7654; font-size: 10.5px; font-style: italic; margin-top: 3px; }
+    .classic-entry-description { color: #57534e; font-size: 10.5px; line-height: 1.75; margin: 8px 0 0; }
+    .classic-entry-line { width: 28px; height: 1px; background: #b8aa91; margin-top: 12px; }
+
+    .classic-certification { display: flex; justify-content: space-between; gap: 15px; padding: 8px 0; border-bottom: 1px solid #e1ddd5; }
+    .classic-certification:last-child { border-bottom: none; }
+    .classic-cert-issuer { color: #78716c; font-style: italic; }
+    .classic-cert-date { color: #78716c; font-family: Arial, sans-serif; font-size: 8px; white-space: nowrap; }
+
+    .classic-reference { padding: 9px 0; border-bottom: 1px solid #e1ddd5; }
+    .classic-reference:last-child { border-bottom: none; }
+    .classic-reference-name { color: #292524; font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; }
+    .classic-reference-details { color: #78716c; font-family: Arial, sans-serif; font-size: 8.5px; line-height: 1.5; margin-top: 2px; }
+
+    @page { size: A4; margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="classic-cv">
+
+    <header class="classic-header">
+        <div class="classic-template-label">Classic Curriculum Vitae</div>
+        {% if resume.photo %}<img src="{{ resume.photo.url }}" alt="{{ resume.full_name }}" class="classic-photo">{% endif %}
+        <h1 class="classic-name">{{ resume.full_name }}</h1>
+        <div class="classic-name-rule"></div>
+        <div class="classic-contact">
+            {% if resume.email %}<span class="classic-contact-item">{{ resume.email }}</span>{% endif %}
+            {% if resume.phone %}<span class="classic-contact-item">{{ resume.phone }}</span>{% endif %}
+            {% if resume.address %}<span class="classic-contact-item">{{ resume.address }}</span>{% endif %}
+        </div>
+    </header>
+
+    <div class="classic-header-border"></div>
+
+    <div class="classic-body">
+
+        <aside class="classic-sidebar">
+
+            <section class="classic-section">
+                <div class="classic-section-heading"><h2>Contact</h2></div>
+                {% if resume.email %}<div class="classic-contact-block"><div class="classic-small-label">Email</div><div class="classic-small-value">{{ resume.email }}</div></div>{% endif %}
+                {% if resume.phone %}<div class="classic-contact-block"><div class="classic-small-label">Phone</div><div class="classic-small-value">{{ resume.phone }}</div></div>{% endif %}
+                {% if resume.address %}<div class="classic-contact-block"><div class="classic-small-label">Address</div><div class="classic-small-value">{{ resume.address }}</div></div>{% endif %}
+            </section>
+
+            {% if resume.skills.all %}
+            <section class="classic-section">
+                <div class="classic-section-heading"><h2>Skills</h2></div>
+                {% for skill in resume.skills.all %}
+                <div class="classic-skill">
+                    <div class="classic-skill-top">
+                        <span class="classic-skill-name">{{ skill.name }}</span>
+                        <span class="classic-skill-level">{{ skill.get_proficiency_display }}</span>
+                    </div>
+                    <div class="classic-skill-track">
+                        {% if "expert" in skill.get_proficiency_display|lower %}<div class="classic-skill-fill expert"></div>
+                        {% elif "advanced" in skill.get_proficiency_display|lower %}<div class="classic-skill-fill advanced"></div>
+                        {% elif "intermediate" in skill.get_proficiency_display|lower %}<div class="classic-skill-fill intermediate"></div>
+                        {% elif "beginner" in skill.get_proficiency_display|lower %}<div class="classic-skill-fill beginner"></div>
+                        {% else %}<div class="classic-skill-fill default"></div>{% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+
+            {% if resume.languages.all %}
+            <section class="classic-section">
+                <div class="classic-section-heading"><h2>Languages</h2></div>
+                <ul class="classic-list">
+                    {% for lang in resume.languages.all %}
+                    <li class="classic-list-item">
+                        <div style="display:flex; justify-content:space-between; gap:8px;">
+                            <strong>{{ lang.name }}</strong><span>{{ lang.get_proficiency_display }}</span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+            {% endif %}
+
+            {% if resume.hobbies.all %}
+            <section class="classic-section">
+                <div class="classic-section-heading"><h2>Interests</h2></div>
+                <div class="classic-hobbies">
+                    {% for hobby in resume.hobbies.all %}<div class="classic-hobby">{{ hobby.name }}</div>{% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if resume.certifications.all %}
+            <section class="classic-section">
+                <div class="classic-section-heading"><h2>Certifications</h2></div>
+                {% for cert in resume.certifications.all %}
+                <div class="classic-list-item">
+                    <div><strong>{{ cert.title }}</strong></div>
+                    {% if cert.issuer %}<div style="color:#78716c; margin-top:2px;">{{ cert.issuer }}</div>{% endif %}
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+
+        </aside>
+
+        <main class="classic-main">
+
+            {% if resume.summary %}
+            <section class="classic-main-section">
+                <div class="classic-section-heading"><h2>Professional Summary</h2></div>
+                <p class="classic-about">{{ resume.summary }}</p>
+            </section>
+            {% endif %}
+
+            <section class="classic-main-section">
+                <div class="classic-section-heading"><h2>Professional Experience</h2></div>
+                {% for exp in resume.experience.all %}
+                <article class="classic-entry">
+                    <div class="classic-entry-header">
+                        <h3 class="classic-entry-title">{{ exp.job_title }}</h3>
+                        <div class="classic-entry-date">
+                            {{ exp.start_date|default:"" }}
+                            {% if exp.is_current %}— Present{% else %}{% if exp.end_date %}— {{ exp.end_date }}{% endif %}{% endif %}
+                        </div>
+                    </div>
+                    <div class="classic-entry-company">{{ exp.company }}</div>
+                    {% if exp.description %}<p class="classic-entry-description">{{ exp.description }}</p>{% endif %}
+                    <div class="classic-entry-line"></div>
+                </article>
+                {% endfor %}
+            </section>
+
+            <section class="classic-main-section">
+                <div class="classic-section-heading"><h2>Education</h2></div>
+                {% for edu in resume.education.all %}
+                <article class="classic-entry">
+                    <div class="classic-entry-header">
+                        <h3 class="classic-entry-title">{{ edu.qualification }}</h3>
+                        <div class="classic-entry-date">
+                            {{ edu.start_date|default:"" }}
+                            {% if edu.is_current %}— Present{% else %}{% if edu.end_date %}— {{ edu.end_date }}{% endif %}{% endif %}
+                        </div>
+                    </div>
+                    <div class="classic-entry-company">{{ edu.institution }}</div>
+                    {% if edu.description %}<p class="classic-entry-description">{{ edu.description }}</p>{% endif %}
+                    <div class="classic-entry-line"></div>
+                </article>
+                {% endfor %}
+            </section>
+
+            {% if resume.references.all %}
+            <section class="classic-main-section">
+                <div class="classic-section-heading"><h2>References</h2></div>
+                {% for ref in resume.references.all %}
+                <div class="classic-reference">
+                    <div class="classic-reference-name">{{ ref.name }}</div>
+                    <div class="classic-reference-details">
+                        {% if ref.relationship %}{{ ref.relationship }}{% endif %}
+                        {% if ref.contact %}{% if ref.relationship %}&nbsp;·&nbsp;{% endif %}{{ ref.contact }}{% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+
+        </main>
+
+    </div>
+
+</div>
+
+</body>
+</html>

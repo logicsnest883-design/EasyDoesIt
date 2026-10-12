@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% block title %}{{ resume.full_name }} | EasyDoesIt{% endblock %}
+
+{% block content %}
+<style>
+    .exec-page { background: #f1efe9; padding: 35px 15px 60px; min-height: 100vh; }
+    .exec-actions { max-width: 880px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: center; }
+    .exec-back { color: #57534e; text-decoration: none; font-family: Arial, sans-serif; font-size: 13px; font-weight: 600; }
+    .exec-back:hover { color: #1c1917; }
+    .exec-download { background: #1c1917; color: #d4af6a; text-decoration: none; padding: 10px 18px; font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; transition: 0.2s ease; }
+    .exec-download:hover { background: #292524; }
+
+    .exec-cv { max-width: 880px; margin: 0 auto; background: #fffdf9; box-shadow: 0 20px 60px rgba(28,25,23,0.15); font-family: 'Georgia', serif; color: #1c1917; }
+
+    .exec-header { background: #1c1917; color: #fffdf9; padding: 60px 70px 46px; text-align: center; }
+    .exec-photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; margin: 0 auto 24px; display: block; border: 2px solid #d4af6a; }
+    .exec-photo-placeholder { width: 96px; height: 96px; border-radius: 50%; margin: 0 auto 24px; background: #292524; display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 700; color: #d4af6a; border: 2px solid #d4af6a; }
+    .exec-name { margin: 0; font-size: 40px; font-weight: 400; letter-spacing: 0.06em; }
+    .exec-rule { width: 70px; height: 1px; background: #d4af6a; margin: 20px auto; }
+    .exec-contact { font-family: Arial, sans-serif; font-size: 10.5px; letter-spacing: 0.05em; color: #d6cfc4; }
+    .exec-contact span:not(:last-child)::after { content: "  •  "; color: #d4af6a; }
+
+    .exec-body { padding: 55px 70px 60px; }
+
+    .exec-section { margin-bottom: 42px; }
+    .exec-section:last-child { margin-bottom: 0; }
+    .exec-section-heading { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; }
+    .exec-section-heading h2 { margin: 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.25em; color: #1c1917; white-space: nowrap; }
+    .exec-section-heading::after { content: ""; flex: 1; height: 1px; background: #d4af6a; }
+
+    .exec-summary { font-size: 13px; line-height: 2; color: #44403c; text-align: center; font-style: italic; max-width: 620px; margin: 0 auto; }
+
+    .exec-entry { margin-bottom: 30px; }
+    .exec-entry:last-child { margin-bottom: 0; }
+    .exec-entry-top { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; }
+    .exec-entry-title { margin: 0; font-size: 16px; font-weight: 700; }
+    .exec-entry-date { font-family: Arial, sans-serif; font-size: 9.5px; letter-spacing: 0.08em; color: #a8a29e; white-space: nowrap; text-transform: uppercase; }
+    .exec-entry-company { font-size: 12px; color: #b08a3e; font-style: italic; margin-top: 3px; }
+    .exec-entry-desc { font-size: 11.5px; line-height: 1.85; color: #44403c; margin-top: 10px; }
+
+    .exec-competencies { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 26px; }
+    .exec-competency { font-family: Arial, sans-serif; font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: #44403c; }
+    .exec-competency::before { content: "◆ "; color: #d4af6a; font-size: 8px; }
+
+    .exec-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .exec-mini-title { font-family: Arial, sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #b08a3e; margin-bottom: 3px; }
+    .exec-mini-item { margin-bottom: 14px; font-size: 11px; color: #44403c; line-height: 1.6; }
+    .exec-mini-item:last-child { margin-bottom: 0; }
+
+    .exec-edit { opacity: 0; transition: 0.2s ease; font-family: Arial, sans-serif; margin-top: 6px; text-align: right; }
+    .exec-editable:hover .exec-edit { opacity: 1; }
+    .exec-edit a, .exec-edit button { color: #b08a3e; font-size: 9px; text-decoration: none; background: none; border: none; padding: 0; cursor: pointer; margin-left: 8px; }
+    .exec-edit a:hover, .exec-edit button:hover { text-decoration: underline; }
+    .exec-add { color: #b08a3e; font-family: Arial, sans-serif; font-size: 9px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; }
+    .exec-add:hover { text-decoration: underline; }
+    .exec-empty { color: #c4c4c8; font-size: 10px; font-family: Arial, sans-serif; text-align: center; display: block; }
+
+    .exec-footer { padding: 16px 70px; text-align: center; border-top: 1px solid #e7e2d8; font-family: Arial, sans-serif; font-size: 9px; color: #a8a29e; }
+
+    @media (max-width: 700px) {
+        .exec-header { padding: 45px 30px 36px; }
+        .exec-body { padding: 40px 30px 45px; }
+        .exec-two-col { grid-template-columns: 1fr; }
+        .exec-name { font-size: 30px; }
+    }
+
+    @media print {
+        @page { size: A4; margin: 0; }
+        html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+        .exec-page { padding: 0 !important; }
+        .exec-actions, .exec-edit, .exec-add { display: none !important; }
+        .exec-cv { box-shadow: none !important; max-width: none !important; }
+    }
+</style>
+
+<div class="exec-page">
+
+    <div class="exec-actions">
+        <a href="{% url 'resume_list' %}" class="exec-back">← Back to all resumes</a>
+        <a href="#" onclick="downloadResumePDF('{% url 'resume_pdf' resume.pk %}', '{{ resume.full_name }}_CV.pdf'); return false;" class="cv-download">↓ Download PDF</a>
+    </div>
+
+    <div class="exec-cv">
+
+        <header class="exec-header">
+            {% if resume.photo %}
+                <img src="{{ resume.photo.url }}" alt="{{ resume.full_name }}" class="exec-photo">
+            {% else %}
+                <div class="exec-photo-placeholder">{{ resume.full_name|slice:":1"|upper }}</div>
+            {% endif %}
+            <h1 class="exec-name">{{ resume.full_name }}</h1>
+            <div class="exec-rule"></div>
+            <div class="exec-contact">
+                {% if resume.email %}<span>{{ resume.email }}</span>{% endif %}
+                {% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}
+                {% if resume.address %}<span>{{ resume.address }}</span>{% endif %}
+            </div>
+        </header>
+
+        <div class="exec-body">
+
+            {% if resume.summary %}
+            <section class="exec-section">
+                <div class="exec-section-heading"><h2>Executive Summary</h2></div>
+                <p class="exec-summary">{{ resume.summary }}</p>
+            </section>
+            {% endif %}
+
+            <section class="exec-section">
+                <div class="exec-section-heading">
+                    <h2>Professional Experience</h2>
+                    <a href="{% url 'experience_add' resume.pk %}" class="exec-add">+ Add</a>
+                </div>
+                {% for exp in resume.experience.all %}
+                <div class="exec-entry exec-editable">
+                    <div class="exec-entry-top">
+                        <h3 class="exec-entry-title">{{ exp.job_title }}</h3>
+                        <span class="exec-entry-date">
+                            {{ exp.start_date|default:"" }} — {% if exp.is_current %}Present{% else %}{{ exp.end_date|default:"" }}{% endif %}
+                        </span>
+                    </div>
+                    <div class="exec-entry-company">{{ exp.company }}</div>
+                    {% if exp.description %}<p class="exec-entry-desc">{{ exp.description }}</p>{% endif %}
+                    <div class="exec-edit">
+                        <a href="{% url 'experience_edit' resume.pk exp.pk %}">Edit</a>
+                        <form method="post" action="{% url 'experience_delete' resume.pk exp.pk %}" style="display:inline;">
+                            {% csrf_token %}<button type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% empty %}
+                <span class="exec-empty">No experience added yet.</span>
+                {% endfor %}
+            </section>
+
+            <section class="exec-section">
+                <div class="exec-section-heading">
+                    <h2>Education</h2>
+                    <a href="{% url 'education_add' resume.pk %}" class="exec-add">+ Add</a>
+                </div>
+                {% for edu in resume.education.all %}
+                <div class="exec-entry exec-editable">
+                    <div class="exec-entry-top">
+                        <h3 class="exec-entry-title">{{ edu.qualification }}</h3>
+                        <span class="exec-entry-date">
+                            {{ edu.start_date|default:"" }} — {% if edu.is_current %}Present{% else %}{{ edu.end_date|default:"" }}{% endif %}
+                        </span>
+                    </div>
+                    <div class="exec-entry-company">{{ edu.institution }}</div>
+                    {% if edu.description %}<p class="exec-entry-desc">{{ edu.description }}</p>{% endif %}
+                    <div class="exec-edit">
+                        <a href="{% url 'education_edit' resume.pk edu.pk %}">Edit</a>
+                        <form method="post" action="{% url 'education_delete' resume.pk edu.pk %}" style="display:inline;">
+                            {% csrf_token %}<button type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% empty %}
+                <span class="exec-empty">No education added yet.</span>
+                {% endfor %}
+            </section>
+
+            {% if resume.skills.all %}
+            <section class="exec-section">
+                <div class="exec-section-heading">
+                    <h2>Core Competencies</h2>
+                    <a href="{% url 'skill_add' resume.pk %}" class="exec-add">+ Add</a>
+                </div>
+                <div class="exec-competencies">
+                    {% for skill in resume.skills.all %}
+                    <span class="exec-competency exec-editable">
+                        {{ skill.name }}
+                        <span class="exec-edit" style="display:inline; margin-top:0;">
+                            <a href="{% url 'skill_edit' resume.pk skill.pk %}">Edit</a>
+                            <form method="post" action="{% url 'skill_delete' resume.pk skill.pk %}" style="display:inline;">
+                                {% csrf_token %}<button type="submit">×</button>
+                            </form>
+                        </span>
+                    </span>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <section class="exec-section">
+                <div class="exec-two-col">
+                    <div>
+                        <div class="exec-section-heading"><h2>Additional</h2>
+                            <a href="{% url 'language_add' resume.pk %}" class="exec-add">+ Language</a>
+                        </div>
+                        {% if resume.languages.all %}
+                            {% for lang in resume.languages.all %}
+                            <div class="exec-mini-item exec-editable">
+                                <div class="exec-mini-title">Language</div>
+                                {{ lang.name }} — {{ lang.get_proficiency_display }}
+                                <div class="exec-edit">
+                                    <a href="{% url 'language_edit' resume.pk lang.pk %}">Edit</a>
+                                    <form method="post" action="{% url 'language_delete' resume.pk lang.pk %}" style="display:inline;">
+                                        {% csrf_token %}<button type="submit">×</button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if resume.hobbies.all %}
+                            <div class="exec-mini-title" style="margin-top: 16px;">Interests</div>
+                            <div class="exec-mini-item">
+                                {% for hobby in resume.hobbies.all %}{{ hobby.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {% if resume.certifications.all %}
+                        <div class="exec-section-heading"><h2>Certifications</h2>
+                            <a href="{% url 'certification_add' resume.pk %}" class="exec-add">+ Add</a>
+                        </div>
+                        {% for cert in resume.certifications.all %}
+                        <div class="exec-mini-item exec-editable">
+                            <div class="exec-mini-title">{{ cert.issuer|default:"Certification" }}</div>
+                            {{ cert.title }}
+                            <div class="exec-edit">
+                                <a href="{% url 'certification_edit' resume.pk cert.pk %}">Edit</a>
+                                <form method="post" action="{% url 'certification_delete' resume.pk cert.pk %}" style="display:inline;">
+                                    {% csrf_token %}<button type="submit">×</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+
+            {% if resume.references.all %}
+            <section class="exec-section">
+                <div class="exec-section-heading">
+                    <h2>References</h2>
+                    <a href="{% url 'reference_add' resume.pk %}" class="exec-add">+ Add</a>
+                </div>
+                <div class="exec-two-col">
+                    {% for ref in resume.references.all %}
+                    <div class="exec-mini-item exec-editable">
+                        <div class="exec-mini-title">{{ ref.relationship|default:"Reference" }}</div>
+                        {{ ref.name }}{% if ref.contact %}<br>{{ ref.contact }}{% endif %}
+                        <div class="exec-edit">
+                            <a href="{% url 'reference_edit' resume.pk ref.pk %}">Edit</a>
+                            <form method="post" action="{% url 'reference_delete' resume.pk ref.pk %}" style="display:inline;">
+                                {% csrf_token %}<button type="submit">×</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+        </div>
+
+        <div class="exec-footer">Created with EasyDoesIt</div>
+
+    </div>
+</div>
+{% endblock %}

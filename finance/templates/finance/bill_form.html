@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} | EasyDoesIt{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl">
+
+        <a href="{% url 'finance:bills' %}"
+           class="mb-4 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-indigo-600">
+            <span aria-hidden="true">←</span>
+            Back to bills
+        </a>
+
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900">
+                {{ page_title }}
+            </h1>
+            <p class="mt-2 text-sm text-slate-600">
+                Add payment details and a due date to help you stay organised.
+            </p>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <form method="post" class="space-y-6 p-5 sm:p-8">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div>
+                    <label for="{{ form.name.id_for_label }}"
+                           class="mb-2 block text-sm font-semibold text-slate-700">
+                        Bill name
+                    </label>
+                    {{ form.name }}
+                    {% for error in form.name.errors %}
+                        <p class="mt-1 text-sm text-rose-600">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                    <div>
+                        <label for="{{ form.amount.id_for_label }}"
+                               class="mb-2 block text-sm font-semibold text-slate-700">
+                            Amount (ZMW)
+                        </label>
+                        {{ form.amount }}
+                        {% for error in form.amount.errors %}
+                            <p class="mt-1 text-sm text-rose-600">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.due_date.id_for_label }}"
+                               class="mb-2 block text-sm font-semibold text-slate-700">
+                            Due date
+                        </label>
+                        {{ form.due_date }}
+                        {% for error in form.due_date.errors %}
+                            <p class="mt-1 text-sm text-rose-600">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <div class="flex items-start gap-3">
+                        <div class="pt-0.5">
+                            {{ form.recurring }}
+                        </div>
+                        <div>
+                            <label for="{{ form.recurring.id_for_label }}"
+                                   class="block text-sm font-semibold text-slate-800">
+                                This is a recurring bill
+                            </label>
+                            <p class="mt-1 text-sm text-slate-500">
+                                Use this for bills that repeat on a regular schedule.
+                            </p>
+                            {% for error in form.recurring.errors %}
+                                <p class="mt-1 text-sm text-rose-600">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="{{ form.frequency.id_for_label }}"
+                               class="mb-2 block text-sm font-semibold text-slate-700">
+                            Repeat frequency
+                        </label>
+                        {{ form.frequency }}
+                        <p class="mt-1 text-xs text-slate-500">
+                            Frequency is saved as a reminder detail. Automatic repeat scheduling is not enabled yet.
+                        </p>
+                        {% for error in form.frequency.errors %}
+                            <p class="mt-1 text-sm text-rose-600">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <label for="{{ form.notes.id_for_label }}"
+                           class="mb-2 block text-sm font-semibold text-slate-700">
+                        Notes <span class="font-normal text-slate-400">(optional)</span>
+                    </label>
+                    {{ form.notes }}
+                    {% for error in form.notes.errors %}
+                        <p class="mt-1 text-sm text-rose-600">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
+                    <a href="{% url 'finance:bills' %}"
+                       class="inline-flex items-center justify-center rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                        Cancel
+                    </a>
+                    <button type="submit"
+                            class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        {{ submit_label }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

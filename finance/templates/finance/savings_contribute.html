@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Add Money | EasyDoesIt{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl">
+
+        <div class="mb-6">
+            <a href="{% url 'finance:savings_goals' %}"
+               class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-indigo-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/>
+                </svg>
+                Back to Savings Goals
+            </a>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+            <div class="bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-7 text-white sm:px-8">
+                <div class="flex items-center gap-4">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">Add Money</h1>
+                        <p class="mt-1 text-sm text-indigo-100">
+                            Record a contribution towards your savings goal.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 sm:p-8">
+
+                <div class="mb-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <h2 class="font-semibold text-slate-900">{{ goal.name }}</h2>
+
+                    <div class="mt-4 grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+                                Saved so far
+                            </p>
+                            <p class="mt-1 text-xl font-bold text-slate-900">
+                                K{{ goal.current_amount|floatformat:2 }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+                                Goal target
+                            </p>
+                            <p class="mt-1 text-xl font-bold text-slate-900">
+                                K{{ goal.target_amount|floatformat:2 }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="mb-2 flex justify-between text-xs">
+                            <span class="font-semibold text-indigo-600">
+                                {{ goal.progress_percentage|floatformat:0 }}% complete
+                            </span>
+                            <span class="text-slate-500">
+                                K{{ goal.remaining_amount|floatformat:2 }} remaining
+                            </span>
+                        </div>
+
+                        <div class="h-2.5 overflow-hidden rounded-full bg-slate-200">
+                            <div class="h-full rounded-full bg-indigo-600"
+                                 style="width: {{ goal.progress_percentage|floatformat:0 }}%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <form method="post" class="space-y-5">
+                    {% csrf_token %}
+
+                    <div>
+                        <label for="{{ form.amount.id_for_label }}"
+                               class="mb-2 block text-sm font-semibold text-slate-700">
+                            Contribution amount
+                        </label>
+
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-4 flex items-center text-sm font-semibold text-slate-500">
+                                K
+                            </span>
+                            {{ form.amount }}
+                        </div>
+
+                        {% for error in form.amount.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                        {% endfor %}
+
+                        <p class="mt-1.5 text-xs text-slate-500">
+                            You can contribute up to K{{ goal.remaining_amount|floatformat:2 }} to reach this goal.
+                        </p>
+                    </div>
+
+                    <div>
+                        <label for="{{ form.notes.id_for_label }}"
+                               class="mb-2 block text-sm font-semibold text-slate-700">
+                            Note <span class="font-normal text-slate-400">(optional)</span>
+                        </label>
+
+                        {{ form.notes }}
+
+                        {% for error in form.notes.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
+                        <a href="{% url 'finance:savings_goals' %}"
+                           class="inline-flex items-center justify-center rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                            Cancel
+                        </a>
+
+                        <button type="submit"
+                                class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                            Save Contribution
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

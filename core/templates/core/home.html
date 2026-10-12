@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+
+{% block title %}EasyDoesIt | Everything Made Easier{% endblock %}
+
+{% block content %}
+<style>
+    .ed-home {
+        --ed-ink: #142033;
+        --ed-muted: #64748b;
+        --ed-line: #e5eaf2;
+        --ed-blue: #4f46e5;
+        --ed-violet: #7c3aed;
+        color: var(--ed-ink);
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .ed-home * { box-sizing: border-box; }
+    .ed-wrap { width: min(1160px, calc(100% - 40px)); margin-inline: auto; }
+
+    .ed-hero {
+        position: relative;
+        isolation: isolate;
+        padding: 82px 0 78px;
+        background:
+            radial-gradient(ellipse at 80% 10%, rgba(129,140,248,.20), transparent 34%),
+            radial-gradient(ellipse at 10% 85%, rgba(45,212,191,.12), transparent 34%),
+            #f7f8ff;
+    }
+    .ed-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        opacity: .35;
+        background-image: radial-gradient(#a5b4fc 1px, transparent 1px);
+        background-size: 25px 25px;
+        mask-image: linear-gradient(90deg, transparent, #000 35%, #000 75%, transparent);
+    }
+    .ed-hero-grid {
+        display: grid;
+        grid-template-columns: 1.02fr .98fr;
+        gap: 54px;
+        align-items: center;
+    }
+    .ed-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 13px;
+        border: 1px solid #dfe4ff;
+        border-radius: 999px;
+        background: rgba(255,255,255,.8);
+        color: #5145cd;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+    .ed-kicker-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: #22c55e; box-shadow: 0 0 0 4px #dcfce7;
+    }
+    .ed-hero h1 {
+        margin: 23px 0 0;
+        max-width: 650px;
+        color: #101828;
+        font-size: clamp(3rem, 6.5vw, 5.6rem);
+        line-height: .99;
+        letter-spacing: -.075em;
+        font-weight: 900;
+    }
+    .ed-hero h1 span {
+        display: block;
+        background: linear-gradient(100deg, #4f46e5 10%, #7c3aed 60%, #0891b2 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    .ed-hero-copy {
+        max-width: 570px;
+        margin: 25px 0 0;
+        color: #596579;
+        font-size: 17px;
+        line-height: 1.8;
+    }
+    .ed-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .ed-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+        min-height: 48px; padding: 13px 19px; border-radius: 13px;
+        text-decoration: none; font-weight: 800; transition: transform .2s, box-shadow .2s, background .2s;
+    }
+    .ed-btn:hover { transform: translateY(-3px); }
+    .ed-btn-primary { background: #4f46e5; color: #fff; box-shadow: 0 12px 25px rgba(79,70,229,.22); }
+    .ed-btn-primary:hover { background: #4338ca; box-shadow: 0 16px 32px rgba(79,70,229,.27); }
+    .ed-btn-light { color: #263247; background: #fff; border: 1px solid #dfe5ef; }
+    .ed-btn-light:hover { box-shadow: 0 10px 24px rgba(15,23,42,.08); }
+
+    .ed-visual {
+        position: relative;
+        min-height: 430px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .ed-glow {
+        position: absolute; width: 340px; height: 340px; border-radius: 50%;
+        background: linear-gradient(135deg, #c7d2fe, #ccfbf1);
+        filter: blur(2px); opacity: .8;
+    }
+    .ed-app-window {
+        position: relative; z-index: 1; width: min(100%, 470px);
+        padding: 13px; border: 1px solid rgba(255,255,255,.9);
+        border-radius: 25px; background: rgba(255,255,255,.75);
+        box-shadow: 0 35px 90px rgba(47,57,105,.17);
+        transform: rotate(1.5deg);
+        backdrop-filter: blur(12px);
+    }
+    .ed-window-inner { padding: 20px; border-radius: 17px; background: #fff; border: 1px solid #edf0f7; }
+    .ed-window-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 23px; }
+    .ed-brand-mini { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 900; }
+    .ed-brand-symbol {
+        display: grid; place-items: center; width: 30px; height: 30px; border-radius: 10px;
+        background: linear-gradient(135deg,#4f46e5,#8b5cf6); color: white; font-weight: 900;
+    }
+    .ed-window-pill { padding: 6px 9px; border-radius: 999px; background: #ecfdf5; color: #047857; font-size: 10px; font-weight: 800; }
+    .ed-preview-heading { font-size: 20px; font-weight: 900; letter-spacing: -.04em; }
+    .ed-preview-sub { margin-top: 5px; color: #8993a5; font-size: 12px; }
+    .ed-preview-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 11px; margin-top: 19px; }
+    .ed-preview-card { min-height: 112px; padding: 15px; border: 1px solid #edf0f6; border-radius: 15px; background: #fff; }
+    .ed-preview-icon { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 11px; background: #eef2ff; font-size: 18px; }
+    .ed-preview-card:nth-child(2) .ed-preview-icon { background: #f3e8ff; }
+    .ed-preview-card:nth-child(3) .ed-preview-icon { background: #d1fae5; }
+    .ed-preview-card:nth-child(4) .ed-preview-icon { background: #ffedd5; }
+    .ed-preview-label { margin-top: 13px; color: #7b8495; font-size: 11px; }
+    .ed-preview-value { margin-top: 3px; font-size: 14px; font-weight: 850; }
+    .ed-float-note {
+        position: absolute; z-index: 2; right: -4px; bottom: 42px;
+        display: flex; align-items: center; gap: 11px; padding: 13px 16px;
+        border: 1px solid #e7eaf4; border-radius: 16px; background: white;
+        box-shadow: 0 18px 45px rgba(15,23,42,.12); font-size: 12px; font-weight: 800;
+    }
+    .ed-float-check { display: grid; place-items: center; width: 31px; height: 31px; border-radius: 10px; background: #dcfce7; color: #15803d; }
+
+    .ed-trust { padding: 23px 0; border-bottom: 1px solid #eef1f6; background: #fff; }
+    .ed-trust-row { display: flex; align-items: center; justify-content: center; gap: 27px; flex-wrap: wrap; color: #718096; font-size: 12px; font-weight: 750; }
+    .ed-trust-row strong { color: #344054; }
+    .ed-trust-item { display: inline-flex; align-items: center; gap: 8px; }
+    .ed-trust-item span { color: #4f46e5; font-size: 17px; }
+
+    .ed-section { padding: 88px 0; }
+    .ed-section-soft { background: #f8fafc; }
+    .ed-section-head { max-width: 690px; margin: 0 auto; text-align: center; }
+    .ed-overline { color: #4f46e5; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .16em; }
+    .ed-section-head h2 { margin: 13px 0 0; color: #111827; font-size: clamp(2rem,4.5vw,3.25rem); line-height: 1.08; letter-spacing: -.06em; font-weight: 900; }
+    .ed-section-head p { margin: 17px auto 0; max-width: 610px; color: #667085; line-height: 1.75; font-size: 16px; }
+    .ed-tools-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 43px; }
+    .ed-tool {
+        position: relative; display: flex; flex-direction: column; align-items: flex-start;
+        min-height: 285px; padding: 27px; border: 1px solid #e6eaf1; border-radius: 21px;
+        background: #fff; text-decoration: none; color: inherit;
+        transition: transform .22s, box-shadow .22s, border-color .22s;
+    }
+    .ed-tool:hover { transform: translateY(-6px); border-color: #c7d2fe; box-shadow: 0 20px 45px rgba(30,41,59,.08); }
+    .ed-tool-icon { display: grid; place-items: center; width: 53px; height: 53px; border-radius: 16px; background: #eef2ff; font-size: 25px; }
+    .ed-tool:nth-child(2) .ed-tool-icon { background: #f3e8ff; }
+    .ed-tool:nth-child(3) .ed-tool-icon { background: #dcfce7; }
+    .ed-tool h3 { margin: 22px 0 0; font-size: 21px; font-weight: 900; letter-spacing: -.035em; }
+    .ed-tool p { margin: 10px 0 22px; color: #667085; font-size: 14px; line-height: 1.75; }
+    .ed-tool-link { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; color: #4f46e5; font-size: 13px; font-weight: 900; }
+    .ed-tool-arrow { transition: transform .2s; }
+    .ed-tool:hover .ed-tool-arrow { transform: translateX(4px); }
+
+    .ed-finance { padding: 26px 0 90px; background: #f8fafc; }
+    .ed-finance-panel {
+        position: relative; overflow: hidden; display: grid; grid-template-columns: 1.05fr .95fr;
+        gap: 42px; align-items: center; padding: clamp(28px,5vw,57px);
+        border-radius: 28px; background: #111827; color: #fff;
+        box-shadow: 0 25px 65px rgba(15,23,42,.15);
+    }
+    .ed-finance-panel::before { content:""; position:absolute; width:380px; height:380px; top:-210px; right:-90px; border-radius:50%; background:rgba(99,102,241,.24); }
+    .ed-finance-copy, .ed-finance-demo { position: relative; z-index: 1; }
+    .ed-finance-tag { display: inline-flex; padding: 7px 11px; border: 1px solid rgba(110,231,183,.22); border-radius: 999px; background: rgba(16,185,129,.10); color: #6ee7b7; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; }
+    .ed-finance-copy h2 { margin: 20px 0 0; font-size: clamp(2.1rem,4.5vw,3.55rem); line-height: 1.05; letter-spacing: -.065em; font-weight: 900; }
+    .ed-finance-copy h2 span { color: #6ee7b7; }
+    .ed-finance-copy p { max-width: 540px; margin: 18px 0 0; color: #b6c0d0; line-height: 1.8; font-size: 15px; }
+    .ed-finance-copy .ed-btn { margin-top: 26px; background: #6ee7b7; color: #052e24; box-shadow: none; }
+    .ed-finance-copy .ed-btn:hover { background: #a7f3d0; }
+    .ed-finance-demo { padding: 20px; border: 1px solid rgba(255,255,255,.12); border-radius: 20px; background: rgba(255,255,255,.06); backdrop-filter: blur(10px); }
+    .ed-demo-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #dbe3ef; font-size: 12px; font-weight: 800; }
+    .ed-demo-period { color: #94a3b8; font-size: 11px; font-weight: 600; }
+    .ed-demo-balance { margin-top: 16px; padding: 19px; border-radius: 15px; background: rgba(255,255,255,.06); }
+    .ed-demo-label { color: #aab6c8; font-size: 11px; }
+    .ed-demo-number { margin-top: 7px; font-size: clamp(1.7rem,3vw,2.3rem); font-weight: 900; letter-spacing: -.04em; }
+    .ed-demo-stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 11px; margin-top: 11px; }
+    .ed-demo-stat { padding: 15px; border-radius: 14px; background: rgba(255,255,255,.05); }
+    .ed-demo-stat strong { display: block; margin-top: 6px; font-size: 16px; }
+    .ed-demo-stat.income strong { color: #6ee7b7; }
+    .ed-demo-stat.expense strong { color: #fca5a5; }
+
+    .ed-benefits { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 43px; }
+    .ed-benefit { padding: 24px 0; border-top: 2px solid #e6e9f1; }
+    .ed-benefit-number { color: #4f46e5; font-size: 12px; font-weight: 900; letter-spacing: .12em; }
+    .ed-benefit h3 { margin: 13px 0 0; font-size: 18px; font-weight: 900; }
+    .ed-benefit p { margin: 9px 0 0; color: #667085; font-size: 14px; line-height: 1.75; }
+
+    .ed-final-cta { padding: 76px 0; background: #eef2ff; text-align: center; }
+    .ed-final-cta h2 { margin: 0; font-size: clamp(2rem,4.5vw,3.3rem); line-height: 1.1; letter-spacing: -.06em; font-weight: 900; }
+    .ed-final-cta p { max-width: 580px; margin: 16px auto 0; color: #667085; line-height: 1.75; }
+    .ed-final-cta .ed-btn { margin-top: 25px; }
+
+    @media (max-width: 900px) {
+        .ed-hero { padding: 66px 0 55px; }
+        .ed-hero-grid { grid-template-columns: 1fr; gap: 24px; }
+        .ed-hero-copy { max-width: 650px; }
+        .ed-visual { min-height: 390px; }
+        .ed-app-window { transform: none; }
+        .ed-tools-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+        .ed-finance-panel { grid-template-columns: 1fr; gap: 30px; }
+    }
+    @media (max-width: 620px) {
+        .ed-wrap { width: min(100% - 30px, 1160px); }
+        .ed-hero { padding: 53px 0 38px; }
+        .ed-hero h1 { font-size: clamp(2.8rem,13vw,4.2rem); letter-spacing: -.07em; }
+        .ed-hero-copy { font-size: 15px; }
+        .ed-actions { flex-direction: column; align-items: stretch; }
+        .ed-btn { width: 100%; }
+        .ed-visual { min-height: 335px; }
+        .ed-glow { width: 260px; height: 260px; }
+        .ed-window-inner { padding: 14px; }
+        .ed-preview-grid { gap: 8px; }
+        .ed-preview-card { min-height: 100px; padding: 11px; }
+        .ed-float-note { right: 0; bottom: 8px; }
+        .ed-trust-row { gap: 14px 20px; }
+        .ed-section { padding: 65px 0; }
+        .ed-tools-grid { grid-template-columns: 1fr; margin-top: 30px; }
+        .ed-tool { min-height: 245px; padding: 24px; }
+        .ed-finance { padding: 0 0 65px; }
+        .ed-finance-panel { padding: 27px 21px; border-radius: 22px; }
+        .ed-demo-stats { gap: 8px; }
+        .ed-demo-stat { padding: 12px; }
+        .ed-benefits { grid-template-columns: 1fr; gap: 5px; margin-top: 30px; }
+        .ed-benefit { padding: 20px 0; }
+        .ed-final-cta { padding: 62px 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .ed-home *, .ed-home *::before, .ed-home *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+</style>
+
+<div class="ed-home">
+    <section class="ed-hero">
+        <div class="ed-wrap ed-hero-grid">
+            <div>
+                <div class="ed-kicker"><span class="ed-kicker-dot"></span> Your everyday productivity hub</div>
+                <h1>Make work <span>easier.</span></h1>
+                <p class="ed-hero-copy">
+                    Practical tools for your work, learning, career and personal finances — brought together in one simple place.
+                    Less switching between platforms. More time to get things done.
+                </p>
+                <div class="ed-actions">
+                    <a href="#ed-tools" class="ed-btn ed-btn-primary">Explore the tools <span aria-hidden="true">→</span></a>
+                    <a href="{% url 'resume_list' %}" class="ed-btn ed-btn-light">Create your CV <span aria-hidden="true">↗</span></a>
+                </div>
+            </div>
+
+            <div class="ed-visual" aria-label="Preview of EasyDoesIt tools">
+                <div class="ed-glow"></div>
+                <div class="ed-app-window">
+                    <div class="ed-window-inner">
+                        <div class="ed-window-top">
+                            <div class="ed-brand-mini"><span class="ed-brand-symbol">E</span> EasyDoesIt</div>
+                            <span class="ed-window-pill">MADE SIMPLE</span>
+                        </div>
+                        <div class="ed-preview-heading">Your workspace</div>
+                        <div class="ed-preview-sub">Useful tools, all in one place.</div>
+                        <div class="ed-preview-grid">
+                            <div class="ed-preview-card"><div class="ed-preview-icon">🎓</div><div class="ed-preview-label">Learning</div><div class="ed-preview-value">Education tools</div></div>
+                            <div class="ed-preview-card"><div class="ed-preview-icon">💼</div><div class="ed-preview-label">Career</div><div class="ed-preview-value">CV builder</div></div>
+                            <div class="ed-preview-card"><div class="ed-preview-icon">📄</div><div class="ed-preview-label">Documents</div><div class="ed-preview-value">Work smarter</div></div>
+                            <div class="ed-preview-card"><div class="ed-preview-icon">💰</div><div class="ed-preview-label">Money</div><div class="ed-preview-value">Finance tracker</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ed-float-note"><span class="ed-float-check">✓</span><span>More done. Less hassle.</span></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="ed-trust">
+        <div class="ed-wrap ed-trust-row">
+            <span class="ed-trust-item"><span>✓</span> <strong>Practical tools</strong></span>
+            <span class="ed-trust-item"><span>✓</span> Simple to use</span>
+            <span class="ed-trust-item"><span>✓</span> Built to grow with you</span>
+        </div>
+    </div>
+
+    <section class="ed-section" id="ed-tools">
+        <div class="ed-wrap">
+            <div class="ed-section-head">
+                <span class="ed-overline">Explore EasyDoesIt</span>
+                <h2>One place for the things you need to do.</h2>
+                <p>Start with a tool that solves a real task, then come back whenever you need something else done.</p>
+            </div>
+
+            <div class="ed-tools-grid">
+                <div class="ed-tool">
+                    <div class="ed-tool-icon">🎓</div>
+                    <h3>Education</h3>
+                    <p>Make teaching, learning and educational preparation easier with useful tools for everyday school work.</p>
+                    <span class="ed-tool-link">Explore education <span class="ed-tool-arrow">→</span></span>
+                </div>
+
+                <a href="{% url 'resume_list' %}" class="ed-tool">
+                    <div class="ed-tool-icon">💼</div>
+                    <h3>Career & CVs</h3>
+                    <p>Create a professional CV, organize your experience and present your skills with confidence.</p>
+                    <span class="ed-tool-link">Build your CV <span class="ed-tool-arrow">→</span></span>
+                </a>
+
+                <a href="{% url 'finance:dashboard' %}" class="ed-tool">
+                    <div class="ed-tool-icon">💰</div>
+                    <h3>Personal finance</h3>
+                    <p>Record income and expenses, manage accounts, plan budgets, track savings and remember upcoming bills.</p>
+                    <span class="ed-tool-link">Explore finance <span class="ed-tool-arrow">→</span></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="ed-finance">
+        <div class="ed-wrap">
+            <div class="ed-finance-panel">
+                <div class="ed-finance-copy">
+                    <span class="ed-finance-tag">Personal finance tools</span>
+                    <h2>Know your money.<br><span>Plan your next move.</span></h2>
+                    <p>Keep your finances organized in one place. Track what comes in, see where it goes, set savings goals and stay ahead of bills — at your own pace.</p>
+                    <a href="{% url 'finance:dashboard' %}" class="ed-btn">Open finance tools <span aria-hidden="true">→</span></a>
+                </div>
+
+                <div class="ed-finance-demo" aria-label="Illustrative finance dashboard preview">
+                    <div class="ed-demo-top"><span>Financial overview</span><span class="ed-demo-period">Dashboard preview</span></div>
+                    <div class="ed-demo-balance">
+                        <div class="ed-demo-label">Your money at a glance</div>
+                        <div class="ed-demo-number">Stay in control</div>
+                    </div>
+                    <div class="ed-demo-stats">
+                        <div class="ed-demo-stat income"><span class="ed-demo-label">Income</span><strong>Track money in</strong></div>
+                        <div class="ed-demo-stat expense"><span class="ed-demo-label">Expenses</span><strong>Track money out</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ed-section">
+        <div class="ed-wrap">
+            <div class="ed-section-head">
+                <span class="ed-overline">Why EasyDoesIt</span>
+                <h2>Useful, focused and straightforward.</h2>
+                <p>The goal is simple: help you finish everyday tasks without making the process feel complicated.</p>
+            </div>
+            <div class="ed-benefits">
+                <div class="ed-benefit">
+                    <div class="ed-benefit-number">01 / ONE PLACE</div>
+                    <h3>Keep things together</h3>
+                    <p>Find practical tools for different parts of life without needing a separate platform for every task.</p>
+                </div>
+                <div class="ed-benefit">
+                    <div class="ed-benefit-number">02 / LESS FRICTION</div>
+                    <h3>Get straight to work</h3>
+                    <p>Clear layouts and focused features help you spend less time figuring things out and more time doing them.</p>
+                </div>
+                <div class="ed-benefit">
+                    <div class="ed-benefit-number">03 / ALWAYS GROWING</div>
+                    <h3>More tools over time</h3>
+                    <p>EasyDoesIt is designed to expand with useful features while keeping the experience approachable.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ed-final-cta">
+        <div class="ed-wrap">
+            <h2>Ready to make things easier?</h2>
+            <p>Choose a tool and get started. Your next task might take fewer steps than you think.</p>
+            <a href="#ed-tools" class="ed-btn ed-btn-primary">Find your tool <span aria-hidden="true">→</span></a>
+        </div>
+    </section>
+</div>
+{% endblock %}

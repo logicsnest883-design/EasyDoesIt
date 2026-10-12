@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+    body { margin: 0; padding: 0; background: #fff; }
+    .min-cv { max-width: 720px; margin: 0 auto; background: #fff; font-family: Helvetica, Arial, sans-serif; color: #171717; padding: 60px 60px; }
+
+    .min-name { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+    .min-contact { font-size: 11px; color: #737373; margin-top: 8px; }
+    .min-contact span:not(:last-child)::after { content: " / "; color: #d4d4d4; }
+
+    .min-section { margin-top: 40px; }
+    .min-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: #a3a3a3; margin-bottom: 16px; }
+
+    .min-summary { font-size: 12.5px; line-height: 1.9; color: #404040; max-width: 560px; }
+
+    .min-entry { margin-bottom: 22px; }
+    .min-entry:last-child { margin-bottom: 0; }
+    .min-entry-row { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; }
+    .min-entry-title { font-size: 13.5px; font-weight: 700; }
+    .min-entry-date { font-size: 10.5px; color: #a3a3a3; white-space: nowrap; }
+    .min-entry-sub { font-size: 12px; color: #737373; margin-top: 2px; }
+    .min-entry-desc { font-size: 11.5px; line-height: 1.75; color: #525252; margin-top: 6px; }
+
+    .min-inline-list { font-size: 11.5px; color: #404040; line-height: 2; }
+    .min-inline-list span:not(:last-child)::after { content: "  ·  "; color: #d4d4d4; }
+
+    .min-mini-row { display: flex; justify-content: space-between; font-size: 11.5px; color: #404040; padding: 5px 0; }
+    .min-mini-row:not(:last-child) { border-bottom: 1px solid #f0f0f0; }
+
+    @page { size: A4; margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="min-cv">
+
+    <header>
+        <h1 class="min-name">{{ resume.full_name }}</h1>
+        <div class="min-contact">
+            {% if resume.email %}<span>{{ resume.email }}</span>{% endif %}
+            {% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}
+            {% if resume.address %}<span>{{ resume.address }}</span>{% endif %}
+        </div>
+    </header>
+
+    {% if resume.summary %}
+    <section class="min-section">
+        <div class="min-section-title">About</div>
+        <p class="min-summary">{{ resume.summary }}</p>
+    </section>
+    {% endif %}
+
+    <section class="min-section">
+        <div class="min-section-title">Experience</div>
+        {% for exp in resume.experience.all %}
+        <div class="min-entry">
+            <div class="min-entry-row">
+                <span class="min-entry-title">{{ exp.job_title }}</span>
+                <span class="min-entry-date">{{ exp.start_date|default:"" }} — {% if exp.is_current %}Present{% else %}{{ exp.end_date|default:"" }}{% endif %}</span>
+            </div>
+            <div class="min-entry-sub">{{ exp.company }}</div>
+            {% if exp.description %}<p class="min-entry-desc">{{ exp.description }}</p>{% endif %}
+        </div>
+        {% endfor %}
+    </section>
+
+    <section class="min-section">
+        <div class="min-section-title">Education</div>
+        {% for edu in resume.education.all %}
+        <div class="min-entry">
+            <div class="min-entry-row">
+                <span class="min-entry-title">{{ edu.qualification }}</span>
+                <span class="min-entry-date">{{ edu.start_date|default:"" }} — {% if edu.is_current %}Present{% else %}{{ edu.end_date|default:"" }}{% endif %}</span>
+            </div>
+            <div class="min-entry-sub">{{ edu.institution }}</div>
+            {% if edu.description %}<p class="min-entry-desc">{{ edu.description }}</p>{% endif %}
+        </div>
+        {% endfor %}
+    </section>
+
+    {% if resume.skills.all %}
+    <section class="min-section">
+        <div class="min-section-title">Skills</div>
+        <div class="min-inline-list">{% for skill in resume.skills.all %}<span>{{ skill.name }}</span>{% endfor %}</div>
+    </section>
+    {% endif %}
+
+    {% if resume.languages.all %}
+    <section class="min-section">
+        <div class="min-section-title">Languages</div>
+        {% for lang in resume.languages.all %}
+        <div class="min-mini-row"><span>{{ lang.name }}</span><span>{{ lang.get_proficiency_display }}</span></div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if resume.certifications.all %}
+    <section class="min-section">
+        <div class="min-section-title">Certifications</div>
+        {% for cert in resume.certifications.all %}
+        <div class="min-mini-row"><span>{{ cert.title }}{% if cert.issuer %} — {{ cert.issuer }}{% endif %}</span></div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if resume.hobbies.all %}
+    <section class="min-section">
+        <div class="min-section-title">Hobbies</div>
+        <div class="min-inline-list">{% for hobby in resume.hobbies.all %}<span>{{ hobby.name }}</span>{% endfor %}</div>
+    </section>
+    {% endif %}
+
+    {% if resume.references.all %}
+    <section class="min-section">
+        <div class="min-section-title">References</div>
+        {% for ref in resume.references.all %}
+        <div class="min-mini-row"><span>{{ ref.name }}{% if ref.relationship %}, {{ ref.relationship }}{% endif %}{% if ref.contact %} — {{ ref.contact }}{% endif %}</span></div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

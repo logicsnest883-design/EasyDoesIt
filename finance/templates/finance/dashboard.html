@@ -1,0 +1,942 @@
+{% extends "base.html" %}
+
+{% block title %}
+Financial Management | EasyDoesIt
+{% endblock %}
+
+{% block content %}
+
+{% if not is_finance_user %}
+
+<!-- ========================================================= -->
+
+<!-- PUBLIC FINANCE LANDING PAGE -->
+
+<!-- ========================================================= -->
+
+<div class="bg-slate-50">
+
+```
+<!-- Hero -->
+<section class="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-indigo-900 to-slate-900">
+
+    <div class="absolute inset-0 opacity-20">
+        <div class="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-indigo-400 blur-3xl"></div>
+        <div class="absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-emerald-400 blur-3xl"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+
+        <div class="mx-auto max-w-4xl text-center">
+
+            <div class="mb-6 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-indigo-100 backdrop-blur">
+
+                <span class="mr-2 h-2 w-2 rounded-full bg-emerald-400"></span>
+
+                EasyDoesIt Financial Management
+
+            </div>
+
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+
+                Take control of your
+                <span class="text-indigo-300">
+                    money.
+                </span>
+
+            </h1>
+
+            <p class="mx-auto mt-6 max-w-2xl text-lg leading-8 text-indigo-100 sm:text-xl">
+
+                Track your income, manage your expenses, plan your budget,
+                monitor your savings and stay on top of your bills —
+                all in one simple place.
+
+            </p>
+
+            <div class="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+
+                <a
+                    href="{% url 'register' %}"
+                    class="inline-flex items-center justify-center rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-indigo-900 shadow-lg transition hover:-translate-y-0.5 hover:bg-indigo-50"
+                >
+                    Create Your Account
+                </a>
+
+                <a
+                    href="{% url 'login' %}"
+                    class="inline-flex items-center justify-center rounded-xl border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"
+                >
+                    Log In
+                </a>
+
+            </div>
+
+            <p class="mt-5 text-sm text-indigo-200">
+                Sign up or log in to start tracking your finances.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- What it does -->
+<section class="bg-white py-20">
+
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <div class="mx-auto max-w-3xl text-center">
+
+            <p class="text-sm font-bold uppercase tracking-widest text-indigo-600">
+                Your money, organised
+            </p>
+
+            <h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                Everything you need to manage your finances
+            </h2>
+
+            <p class="mt-5 text-lg leading-8 text-slate-600">
+                EasyDoesIt gives you a simple way to understand where your
+                money comes from, where it goes and what you are working
+                towards.
+            </p>
+
+        </div>
+
+
+        <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+            <!-- Income -->
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-7 transition hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-6 w-6"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M12 19V5m0 0l-5 5m5-5l5 5"/>
+
+                    </svg>
+
+                </div>
+
+                <h3 class="mt-5 text-lg font-bold text-slate-900">
+                    Track your income
+                </h3>
+
+                <p class="mt-2 leading-7 text-slate-600">
+                    Keep a record of your salary, business income,
+                    freelance earnings and other sources of money.
+                </p>
+
+            </div>
+
+
+            <!-- Expenses -->
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-7 transition hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-100 text-rose-600">
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-6 w-6"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M12 5v14m0 0l5-5m-5 5l-5-5"/>
+
+                    </svg>
+
+                </div>
+
+                <h3 class="mt-5 text-lg font-bold text-slate-900">
+                    Understand your spending
+                </h3>
+
+                <p class="mt-2 leading-7 text-slate-600">
+                    Record your expenses and see exactly how much you
+                    spend on food, transport, rent, airtime and more.
+                </p>
+
+            </div>
+
+
+            <!-- Budgets -->
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-7 transition hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-6 w-6"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M9 14l2-2 4 4m0-8l-4 4-2-2"/>
+
+                    </svg>
+
+                </div>
+
+                <h3 class="mt-5 text-lg font-bold text-slate-900">
+                    Create budgets
+                </h3>
+
+                <p class="mt-2 leading-7 text-slate-600">
+                    Set spending limits for different areas of your life
+                    and keep track of how close you are to reaching them.
+                </p>
+
+            </div>
+
+
+            <!-- Savings -->
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-7 transition hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-6 w-6"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M12 8c-2.21 0-4 1.12-4 2.5S9.79 13 12 13s4 1.12 4 2.5S14.21 18 12 18m0-10V6m0 12v-2"/>
+
+                    </svg>
+
+                </div>
+
+                <h3 class="mt-5 text-lg font-bold text-slate-900">
+                    Reach savings goals
+                </h3>
+
+                <p class="mt-2 leading-7 text-slate-600">
+                    Set targets for things that matter to you and watch
+                    your progress as you save.
+                </p>
+
+            </div>
+
+
+            <!-- Bills -->
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-7 transition hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-100 text-cyan-600">
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-6 w-6"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M9 14l2-2 4 4m0-8l-4 4-2-2"/>
+
+                    </svg>
+
+                </div>
+
+                <h3 class="mt-5 text-lg font-bold text-slate-900">
+                    Stay on top of bills
+                </h3>
+
+                <p class="mt-2 leading-7 text-slate-600">
+                    Keep your upcoming bills organised so important
+                    payments don't get forgotten.
+                </p>
+
+            </div>
+
+
+            <!-- Reports -->
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-7 transition hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-purple-600">
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-6 w-6"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M9 17v-2m3 2v-6m3 6V7m3 10H6"/>
+
+                    </svg>
+
+                </div>
+
+                <h3 class="mt-5 text-lg font-bold text-slate-900">
+                    See your financial picture
+                </h3>
+
+                <p class="mt-2 leading-7 text-slate-600">
+                    Get a clearer picture of your financial habits through
+                    summaries, reports and spending insights.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- How it works -->
+<section class="bg-slate-50 py-20">
+
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <div class="mx-auto max-w-3xl text-center">
+
+            <p class="text-sm font-bold uppercase tracking-widest text-indigo-600">
+                Simple to use
+            </p>
+
+            <h2 class="mt-3 text-3xl font-bold text-slate-900 sm:text-4xl">
+                Start managing your money in minutes
+            </h2>
+
+        </div>
+
+
+        <div class="mt-14 grid gap-8 md:grid-cols-3">
+
+            <div class="text-center">
+
+                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 text-xl font-bold text-white">
+                    1
+                </div>
+
+                <h3 class="mt-5 text-lg font-bold text-slate-900">
+                    Create your account
+                </h3>
+
+                <p class="mt-2 leading-7 text-slate-600">
+                    Sign up for EasyDoesIt and access your personal
+                    financial management space.
+                </p>
+
+            </div>
+
+
+            <div class="text-center">
+
+                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 text-xl font-bold text-white">
+                    2
+                </div>
+
+                <h3 class="mt-5 text-lg font-bold text-slate-900">
+                    Add your finances
+                </h3>
+
+                <p class="mt-2 leading-7 text-slate-600">
+                    Add your accounts, income, expenses, budgets and
+                    financial goals.
+                </p>
+
+            </div>
+
+
+            <div class="text-center">
+
+                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 text-xl font-bold text-white">
+                    3
+                </div>
+
+                <h3 class="mt-5 text-lg font-bold text-slate-900">
+                    Understand your money
+                </h3>
+
+                <p class="mt-2 leading-7 text-slate-600">
+                    Use your dashboard to understand your spending,
+                    plan ahead and work towards your goals.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Privacy -->
+<section class="bg-white py-16">
+
+    <div class="mx-auto max-w-4xl px-6 text-center lg:px-8">
+
+        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-700">
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="h-7 w-7"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2V9a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2zm10-10V5a4 4 0 00-8 0v4h8z"/>
+
+            </svg>
+
+        </div>
+
+        <h2 class="mt-5 text-2xl font-bold text-slate-900">
+            Your financial information stays personal
+        </h2>
+
+        <p class="mx-auto mt-4 max-w-2xl leading-7 text-slate-600">
+            Your financial records are associated with your EasyDoesIt
+            account. Your personal financial dashboard is only available
+            after you sign in.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- CTA -->
+<section class="bg-gradient-to-r from-indigo-700 to-indigo-900 py-20">
+
+    <div class="mx-auto max-w-4xl px-6 text-center lg:px-8">
+
+        <h2 class="text-3xl font-bold text-white sm:text-4xl">
+            Ready to take control of your finances?
+        </h2>
+
+        <p class="mx-auto mt-5 max-w-2xl text-lg leading-8 text-indigo-100">
+            Create your EasyDoesIt account and start building a clearer
+            picture of your financial life.
+        </p>
+
+        <div class="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+
+            <a
+                href="{% url 'register' %}"
+                class="inline-flex items-center justify-center rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-indigo-900 transition hover:bg-indigo-50"
+            >
+                Sign Up
+            </a>
+
+            <a
+                href="{% url 'login' %}"
+                class="inline-flex items-center justify-center rounded-xl border border-white/30 px-7 py-3.5 text-sm font-bold text-white transition hover:bg-white/10"
+            >
+                Log In
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+```
+
+</div>
+
+{% else %}
+
+<!-- ========================================================= -->
+
+<!-- LOGGED-IN FINANCE DASHBOARD -->
+
+<!-- ========================================================= -->
+
+<div class="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-10">
+
+```
+<div class="mx-auto max-w-7xl">
+
+    <div class="mb-8 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
+        <div>
+
+            <p class="mb-1 text-sm font-semibold uppercase tracking-wider text-indigo-600">
+                Money Manager
+            </p>
+
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                Welcome back{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}
+            </h1>
+
+            <p class="mt-2 text-slate-500">
+                Here's an overview of your finances.
+            </p>
+
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+
+            <a
+                href="{% url 'finance:transaction_add_income' %}"
+                class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+            >
+                + Add Income
+            </a>
+
+            <a
+                href="{% url 'finance:transaction_add_expense' %}"
+                class="inline-flex items-center justify-center rounded-xl bg-rose-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700"
+            >
+                − Add Expense
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Summary cards -->
+
+    <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+
+            <p class="text-sm font-medium text-slate-500">
+                Total Balance
+            </p>
+
+            <h2 class="mt-2 text-2xl font-bold text-slate-900">
+                K {{ total_balance|floatformat:2 }}
+            </h2>
+
+        </div>
+
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+
+            <p class="text-sm font-medium text-slate-500">
+                Income — {{ current_month }}
+            </p>
+
+            <h2 class="mt-2 text-2xl font-bold text-emerald-600">
+                K {{ income|floatformat:2 }}
+            </h2>
+
+        </div>
+
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+
+            <p class="text-sm font-medium text-slate-500">
+                Expenses — {{ current_month }}
+            </p>
+
+            <h2 class="mt-2 text-2xl font-bold text-rose-600">
+                K {{ expenses|floatformat:2 }}
+            </h2>
+
+        </div>
+
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+
+            <p class="text-sm font-medium text-slate-500">
+                Available This Month
+            </p>
+
+            <h2 class="mt-2 text-2xl font-bold text-indigo-600">
+                K {{ available|floatformat:2 }}
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- Accounts and transactions -->
+
+    <div class="mt-8 grid gap-6 lg:grid-cols-3">
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+
+            <div class="mb-5 flex items-center justify-between">
+
+                <div>
+
+                    <a
+                        href="{% url 'finance:accounts' %}"
+                        class="text-lg font-bold text-slate-900 transition hover:text-indigo-600"
+                    >
+                        My Accounts
+                    </a>
+
+                    <p class="text-sm text-slate-500">
+                        Your money
+                    </p>
+
+                </div>
+
+                <a
+                    href="{% url 'finance:account_add' %}"
+                    class="text-sm font-semibold text-indigo-600 transition hover:text-indigo-700"
+                >
+                    Add
+                </a>
+
+            </div>
+
+            {% if accounts %}
+
+                <div class="space-y-3">
+
+                    {% for account in accounts %}
+
+                        <a
+                            href="{% url 'finance:accounts' %}"
+                            class="flex items-center justify-between rounded-xl bg-slate-50 p-4 transition hover:bg-indigo-50"
+                        >
+
+                            <div>
+
+                                <p class="font-semibold text-slate-800">
+                                    {{ account.name }}
+                                </p>
+
+                                <p class="mt-1 text-xs text-slate-500">
+                                    {{ account.get_account_type_display }}
+                                </p>
+
+                            </div>
+
+                            <p class="font-bold text-slate-900">
+                                K {{ account.balance|floatformat:2 }}
+                            </p>
+
+                        </a>
+
+                    {% endfor %}
+
+                </div>
+
+                <a
+                    href="{% url 'finance:accounts' %}"
+                    class="mt-4 block text-center text-sm font-semibold text-indigo-600 transition hover:text-indigo-700"
+                >
+                    Manage all accounts →
+                </a>
+
+            {% else %}
+
+                <div class="rounded-xl border border-dashed border-slate-300 p-6 text-center">
+
+                    <p class="text-sm text-slate-500">
+                        No accounts added yet.
+                    </p>
+
+                    <a
+                        href="{% url 'finance:account_add' %}"
+                        class="mt-3 inline-block text-sm font-semibold text-indigo-600 transition hover:text-indigo-700"
+                    >
+                        Add your first account
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-2">
+
+            <div class="mb-5 flex items-center justify-between">
+
+                <div>
+
+                    <h2 class="text-lg font-bold text-slate-900">
+                        Recent Transactions
+                    </h2>
+
+                    <p class="text-sm text-slate-500">
+                        Your latest activity
+                    </p>
+
+                </div>
+
+                <a
+                    href="#"
+                    class="text-sm font-semibold text-indigo-600"
+                >
+                    View all
+                </a>
+
+            </div>
+
+
+            {% if recent_transactions %}
+
+                <div class="space-y-3">
+
+                    {% for transaction in recent_transactions %}
+
+                        <div class="flex items-center justify-between rounded-xl bg-slate-50 p-4">
+
+                            <div>
+
+                                <p class="font-semibold text-slate-800">
+                                    {{ transaction.description }}
+                                </p>
+
+                                <p class="mt-1 text-xs text-slate-500">
+                                    {{ transaction.category.name }}
+                                    ·
+                                    {{ transaction.transaction_date|date:"d M Y" }}
+                                </p>
+
+                            </div>
+
+                            {% if transaction.transaction_type == "income" %}
+
+                                <span class="font-bold text-emerald-600">
+                                    + K {{ transaction.amount|floatformat:2 }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="font-bold text-rose-600">
+                                    - K {{ transaction.amount|floatformat:2 }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="rounded-xl border border-dashed border-slate-300 p-10 text-center">
+
+                    <h3 class="font-semibold text-slate-800">
+                        No transactions yet
+                    </h3>
+
+                    <p class="mt-1 text-sm text-slate-500">
+                        Add your first income or expense to get started.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Savings and bills -->
+
+    <div class="mt-6 grid gap-6 lg:grid-cols-2">
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+
+            <div class="mb-5 flex items-center justify-between">
+
+                <div>
+
+                    <h2 class="text-lg font-bold text-slate-900">
+                        Savings Goals
+                    </h2>
+
+                    <p class="text-sm text-slate-500">
+                        What you're working towards
+                    </p>
+
+                </div>
+
+                <a
+                    href="{% url 'finance:savings_goals' %}"
+                    class="text-sm font-semibold text-indigo-600"
+                >
+                    Add Goal
+                </a>
+
+            </div>
+
+
+            {% if savings_goals %}
+
+                <div class="space-y-5">
+
+                    {% for goal in savings_goals %}
+
+                        <div>
+
+                            <div class="mb-2 flex items-center justify-between">
+
+                                <div>
+
+                                    <p class="font-semibold text-slate-800">
+                                        {{ goal.name }}
+                                    </p>
+
+                                    <p class="text-xs text-slate-500">
+                                        K {{ goal.current_amount|floatformat:2 }}
+                                        of
+                                        K {{ goal.target_amount|floatformat:2 }}
+                                    </p>
+
+                                </div>
+
+                                <span class="text-sm font-bold text-indigo-600">
+                                    {{ goal.progress_percentage|floatformat:0 }}%
+                                </span>
+
+                            </div>
+
+                            <div class="h-2.5 overflow-hidden rounded-full bg-slate-100">
+
+                                <div
+                                    class="h-full rounded-full bg-indigo-600"
+                                    style="width: {{ goal.progress_percentage }}%"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="rounded-xl bg-slate-50 p-6 text-center">
+
+                    <p class="text-sm text-slate-500">
+                        No active savings goals yet.
+                    </p>
+
+                    <a
+                        href="#"
+                        class="mt-2 inline-block text-sm font-semibold text-indigo-600"
+                    >
+                        Create a goal
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+
+            <div class="mb-5 flex items-center justify-between">
+
+                <div>
+
+                    <h2 class="text-lg font-bold text-slate-900">
+                        Upcoming Bills
+                    </h2>
+
+                    <p class="text-sm text-slate-500">
+                        Payments coming up
+                    </p>
+
+                </div>
+
+                <a
+                    href="{% url 'finance:bills' %}"
+                    class="text-sm font-semibold text-indigo-600"
+                >
+                    Manage
+                </a>
+
+            </div>
+
+
+            {% if upcoming_bills %}
+
+                <div class="space-y-3">
+
+                    {% for bill in upcoming_bills %}
+
+                        <div class="flex items-center justify-between rounded-xl bg-slate-50 p-4">
+
+                            <div>
+
+                                <p class="font-semibold text-slate-800">
+                                    {{ bill.name }}
+                                </p>
+
+                                <p class="mt-1 text-xs text-slate-500">
+                                    Due {{ bill.due_date|date:"d M Y" }}
+                                </p>
+
+                            </div>
+
+                            <p class="font-bold text-slate-900">
+                                K {{ bill.amount|floatformat:2 }}
+                            </p>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="rounded-xl bg-slate-50 p-6 text-center">
+
+                    <p class="text-sm text-slate-500">
+                        No upcoming bills.
+                    </p>
+
+                    <a
+                        href="% url 'finance:bills' %}"
+                        class="mt-2 inline-block text-sm font-semibold text-indigo-600"
+                    >
+                        Add a bill
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+{% endif %}
+
+{% endblock %}

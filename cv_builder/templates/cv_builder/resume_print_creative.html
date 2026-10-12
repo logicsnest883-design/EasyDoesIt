@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+    body { margin: 0; padding: 0; background: #fff; }
+    .creative-cv { max-width: 1000px; margin: 0 auto; background: #fff; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
+
+    .creative-header { background: linear-gradient(120deg, #a78bfa 0%, #fb7185 100%); padding: 45px 50px 60px; position: relative; color: #fff; }
+    .creative-header::after { content: ""; position: absolute; bottom: -1px; left: 0; right: 0; height: 40px; background: #fff; border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+    .creative-header-inner { display: flex; align-items: center; gap: 24px; position: relative; z-index: 2; }
+    .creative-photo { width: 110px; height: 110px; border-radius: 28px; object-fit: cover; border: 4px solid rgba(255,255,255,0.6); }
+    .creative-photo-placeholder { width: 110px; height: 110px; border-radius: 28px; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 800; color: #fff; border: 4px solid rgba(255,255,255,0.6); }
+    .creative-name { margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -0.02em; }
+    .creative-tagline { margin-top: 6px; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.9; }
+    .creative-contact-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; font-size: 11px; }
+    .creative-contact-pill { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 999px; }
+
+    .creative-body { display: grid; grid-template-columns: 34% 66%; padding: 0 0 40px; }
+    .creative-sidebar { padding: 20px 36px 0; }
+    .creative-main { padding: 20px 44px 0; }
+
+    .creative-section { margin-bottom: 30px; }
+    .creative-section-title { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .creative-dot { width: 9px; height: 9px; border-radius: 50%; background: #fb7185; }
+    .creative-section-title h2 { margin: 0; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: #6b21a8; }
+
+    .creative-about { color: #52525b; font-size: 11.5px; line-height: 1.8; margin: 0; }
+
+    .creative-tag-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .creative-tag { background: #f3e8ff; color: #6b21a8; padding: 6px 13px; border-radius: 999px; font-size: 10.5px; font-weight: 600; }
+    .creative-tag.hobby { background: #ffe4e6; color: #e11d48; }
+
+    .creative-lang-item { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed #e9d5ff; font-size: 11px; color: #3f3f46; }
+    .creative-lang-item:last-child { border-bottom: none; }
+    .creative-lang-level { color: #a78bfa; font-weight: 700; font-size: 9.5px; text-transform: uppercase; }
+
+    .creative-card { background: #fdf4f5; border-radius: 12px; padding: 12px 15px; margin-bottom: 10px; }
+    .creative-card-title { font-size: 11px; font-weight: 700; color: #27272a; }
+    .creative-card-sub { font-size: 9.5px; color: #71717a; margin-top: 2px; }
+
+    .creative-entry { margin-bottom: 24px; padding-left: 22px; position: relative; border-left: 3px solid #f3e8ff; }
+    .creative-entry::before { content: ""; position: absolute; left: -8px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: linear-gradient(120deg, #a78bfa, #fb7185); }
+    .creative-entry-title { margin: 0; font-size: 14px; font-weight: 800; color: #27272a; }
+    .creative-entry-company { font-size: 11px; color: #a78bfa; font-weight: 700; margin-top: 2px; }
+    .creative-entry-date { font-size: 9.5px; color: #a1a1aa; font-weight: 600; margin-top: 3px; }
+    .creative-entry-desc { font-size: 10.5px; color: #52525b; line-height: 1.7; margin-top: 8px; }
+
+    @page { size: A4; margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="creative-cv">
+
+    <header class="creative-header">
+        <div class="creative-header-inner">
+            {% if resume.photo %}
+                <img src="{{ resume.photo.url }}" alt="{{ resume.full_name }}" class="creative-photo">
+            {% else %}
+                <div class="creative-photo-placeholder">{{ resume.full_name|slice:":1"|upper }}</div>
+            {% endif %}
+            <div>
+                <h1 class="creative-name">{{ resume.full_name }}</h1>
+                <div class="creative-tagline">Creative Portfolio Resume</div>
+                <div class="creative-contact-row">
+                    {% if resume.email %}<span class="creative-contact-pill">{{ resume.email }}</span>{% endif %}
+                    {% if resume.phone %}<span class="creative-contact-pill">{{ resume.phone }}</span>{% endif %}
+                    {% if resume.address %}<span class="creative-contact-pill">{{ resume.address }}</span>{% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="creative-body">
+
+        <aside class="creative-sidebar">
+
+            {% if resume.summary %}
+            <section class="creative-section">
+                <div class="creative-section-title"><span class="creative-dot"></span><h2>About</h2></div>
+                <p class="creative-about">{{ resume.summary }}</p>
+            </section>
+            {% endif %}
+
+            {% if resume.skills.all %}
+            <section class="creative-section">
+                <div class="creative-section-title"><span class="creative-dot"></span><h2>Skills</h2></div>
+                <div class="creative-tag-group">
+                    {% for skill in resume.skills.all %}<div class="creative-tag">{{ skill.name }}</div>{% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if resume.languages.all %}
+            <section class="creative-section">
+                <div class="creative-section-title"><span class="creative-dot"></span><h2>Languages</h2></div>
+                {% for lang in resume.languages.all %}
+                <div class="creative-lang-item">
+                    <span>{{ lang.name }}</span><span class="creative-lang-level">{{ lang.get_proficiency_display }}</span>
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+
+            {% if resume.hobbies.all %}
+            <section class="creative-section">
+                <div class="creative-section-title"><span class="creative-dot"></span><h2>Hobbies</h2></div>
+                <div class="creative-tag-group">
+                    {% for hobby in resume.hobbies.all %}<div class="creative-tag hobby">{{ hobby.name }}</div>{% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if resume.certifications.all %}
+            <section class="creative-section">
+                <div class="creative-section-title"><span class="creative-dot"></span><h2>Certifications</h2></div>
+                {% for cert in resume.certifications.all %}
+                <div class="creative-card">
+                    <div class="creative-card-title">{{ cert.title }}</div>
+                    {% if cert.issuer %}<div class="creative-card-sub">{{ cert.issuer }}</div>{% endif %}
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+
+            {% if resume.references.all %}
+            <section class="creative-section">
+                <div class="creative-section-title"><span class="creative-dot"></span><h2>References</h2></div>
+                {% for ref in resume.references.all %}
+                <div class="creative-card">
+                    <div class="creative-card-title">{{ ref.name }}</div>
+                    {% if ref.relationship %}<div class="creative-card-sub">{{ ref.relationship }}</div>{% endif %}
+                    {% if ref.contact %}<div class="creative-card-sub">{{ ref.contact }}</div>{% endif %}
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+
+        </aside>
+
+        <main class="creative-main">
+
+            <section class="creative-section">
+                <div class="creative-section-title"><span class="creative-dot"></span><h2>Experience</h2></div>
+                {% for exp in resume.experience.all %}
+                <div class="creative-entry">
+                    <h3 class="creative-entry-title">{{ exp.job_title }}</h3>
+                    <div class="creative-entry-company">{{ exp.company }}</div>
+                    <div class="creative-entry-date">
+                        {{ exp.start_date|default:"" }} — {% if exp.is_current %}Present{% else %}{{ exp.end_date|default:"" }}{% endif %}
+                    </div>
+                    {% if exp.description %}<p class="creative-entry-desc">{{ exp.description }}</p>{% endif %}
+                </div>
+                {% endfor %}
+            </section>
+
+            <section class="creative-section">
+                <div class="creative-section-title"><span class="creative-dot"></span><h2>Education</h2></div>
+                {% for edu in resume.education.all %}
+                <div class="creative-entry">
+                    <h3 class="creative-entry-title">{{ edu.qualification }}</h3>
+                    <div class="creative-entry-company">{{ edu.institution }}</div>
+                    <div class="creative-entry-date">
+                        {{ edu.start_date|default:"" }} — {% if edu.is_current %}Present{% else %}{{ edu.end_date|default:"" }}{% endif %}
+                    </div>
+                    {% if edu.description %}<p class="creative-entry-desc">{{ edu.description }}</p>{% endif %}
+                </div>
+                {% endfor %}
+            </section>
+
+        </main>
+    </div>
+
+</div>
+
+</body>
+</html>

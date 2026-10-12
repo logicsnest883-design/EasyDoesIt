@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page_title }} | EasyDoesIt
+{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-10">
+
+    <div class="mx-auto max-w-2xl">
+
+        <a
+            href="{% url 'finance:accounts' %}"
+            class="text-sm font-semibold text-indigo-600 hover:text-indigo-700"
+        >
+            ← My Accounts
+        </a>
+
+
+        <div class="mt-5 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
+
+            <div class="mb-8">
+
+                <p class="text-sm font-semibold uppercase tracking-wider text-indigo-600">
+                    Money Manager
+                </p>
+
+                <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                    {{ page_title }}
+                </h1>
+
+                <p class="mt-2 text-sm leading-6 text-slate-500">
+                    Add a place where you keep your money so EasyDoesIt can track your overall financial position.
+                </p>
+
+            </div>
+
+
+            <form method="post" class="space-y-6">
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+
+                        {{ form.non_field_errors }}
+
+                    </div>
+
+                {% endif %}
+
+
+                <div>
+
+                    <label
+                        for="{{ form.name.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Account Name
+                    </label>
+
+                    {{ form.name }}
+
+                    {% if form.name.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.name.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                    <p class="mt-2 text-xs text-slate-400">
+                        Example: Airtel Money, Zanaco, Home Cash, Emergency Savings.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        for="{{ form.account_type.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Account Type
+                    </label>
+
+                    {{ form.account_type }}
+
+                    {% if form.account_type.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.account_type.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        for="{{ form.balance.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Current Balance
+                    </label>
+
+                    {{ form.balance }}
+
+                    {% if form.balance.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.balance.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                    <p class="mt-2 text-xs text-slate-400">
+                        Enter the amount currently available in this account.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        for="{{ form.currency.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
+                        Currency
+                    </label>
+
+                    {{ form.currency }}
+
+                    {% if form.currency.errors %}
+
+                        <p class="mt-2 text-sm text-rose-600">
+                            {{ form.currency.errors.0 }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-6 sm:flex-row sm:justify-end">
+
+                    <a
+                        href="{% url 'finance:accounts' %}"
+                        class="inline-flex items-center justify-center rounded-xl border border-slate-200 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                    >
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+                    >
+                        {{ submit_text }}
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

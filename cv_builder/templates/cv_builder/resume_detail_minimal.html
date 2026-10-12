@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+{% block title %}{{ resume.full_name }} | EasyDoesIt{% endblock %}
+
+{% block content %}
+<style>
+    .min-page { background: #fafafa; padding: 35px 15px 60px; min-height: 100vh; }
+    .min-actions { max-width: 720px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: center; font-family: Helvetica, Arial, sans-serif; }
+    .min-back { color: #737373; text-decoration: none; font-size: 12px; font-weight: 500; }
+    .min-back:hover { color: #171717; }
+    .min-download { color: #171717; text-decoration: none; font-size: 12px; font-weight: 700; border-bottom: 1px solid #171717; padding-bottom: 1px; }
+    .min-download:hover { color: #000; }
+
+    .min-cv { max-width: 720px; margin: 0 auto; background: #fff; font-family: Helvetica, Arial, sans-serif; color: #171717; padding: 70px 60px; }
+
+    .min-name { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+    .min-contact { font-size: 11px; color: #737373; margin-top: 8px; }
+    .min-contact span:not(:last-child)::after { content: " / "; color: #d4d4d4; }
+
+    .min-section { margin-top: 44px; }
+    .min-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: #a3a3a3; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+
+    .min-summary { font-size: 12.5px; line-height: 1.9; color: #404040; max-width: 560px; }
+
+    .min-entry { margin-bottom: 22px; }
+    .min-entry:last-child { margin-bottom: 0; }
+    .min-entry-row { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; }
+    .min-entry-title { font-size: 13.5px; font-weight: 700; }
+    .min-entry-date { font-size: 10.5px; color: #a3a3a3; white-space: nowrap; }
+    .min-entry-sub { font-size: 12px; color: #737373; margin-top: 2px; }
+    .min-entry-desc { font-size: 11.5px; line-height: 1.75; color: #525252; margin-top: 6px; }
+
+    .min-inline-list { font-size: 11.5px; color: #404040; line-height: 2; }
+    .min-inline-list span:not(:last-child)::after { content: "  ·  "; color: #d4d4d4; }
+
+    .min-mini-row { display: flex; justify-content: space-between; font-size: 11.5px; color: #404040; padding: 5px 0; }
+    .min-mini-row:not(:last-child) { border-bottom: 1px solid #f0f0f0; }
+
+    .min-edit { opacity: 0; transition: 0.2s ease; margin-left: 10px; display: inline-block; }
+    .min-editable:hover .min-edit { opacity: 1; }
+    .min-edit a, .min-edit button { color: #a3a3a3; font-size: 9.5px; text-decoration: none; background: none; border: none; padding: 0; cursor: pointer; margin-right: 6px; }
+    .min-edit a:hover, .min-edit button:hover { color: #171717; text-decoration: underline; }
+    .min-add { color: #a3a3a3; font-size: 10px; text-decoration: none; font-weight: 500; }
+    .min-add:hover { color: #171717; text-decoration: underline; }
+    .min-empty { color: #d4d4d4; font-size: 11px; }
+
+    .min-footer { max-width: 720px; margin: 30px auto 0; text-align: center; font-size: 9.5px; color: #d4d4d4; font-family: Helvetica, Arial, sans-serif; }
+
+    @media (max-width: 600px) {
+        .min-cv { padding: 45px 28px; }
+        .min-name { font-size: 22px; }
+        .min-entry-row { flex-direction: column; gap: 2px; }
+    }
+
+    @media print {
+        @page { size: A4; margin: 0; }
+        html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+        .min-page { padding: 0 !important; }
+        .min-actions, .min-edit, .min-add, .min-footer { display: none !important; }
+        .min-cv { max-width: none !important; }
+    }
+</style>
+
+<div class="min-page">
+
+    <div class="min-actions">
+        <a href="{% url 'resume_list' %}" class="min-back">← Back to all resumes</a>
+        <a href="#" onclick="downloadResumePDF('{% url 'resume_pdf' resume.pk %}', '{{ resume.full_name }}_CV.pdf'); return false;" class="cv-download">↓ Download PDF</a>
+    </div>
+
+    <div class="min-cv">
+
+        <header>
+            <h1 class="min-name">{{ resume.full_name }}</h1>
+            <div class="min-contact">
+                {% if resume.email %}<span>{{ resume.email }}</span>{% endif %}
+                {% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}
+                {% if resume.address %}<span>{{ resume.address }}</span>{% endif %}
+            </div>
+        </header>
+
+        {% if resume.summary %}
+        <section class="min-section">
+            <div class="min-section-title">About</div>
+            <p class="min-summary">{{ resume.summary }}</p>
+        </section>
+        {% endif %}
+
+        <section class="min-section">
+            <div class="min-section-title">
+                Experience
+                <a href="{% url 'experience_add' resume.pk %}" class="min-add">+ Add</a>
+            </div>
+            {% for exp in resume.experience.all %}
+            <div class="min-entry min-editable">
+                <div class="min-entry-row">
+                    <span class="min-entry-title">{{ exp.job_title }}</span>
+                    <span class="min-entry-date">{{ exp.start_date|default:"" }} — {% if exp.is_current %}Present{% else %}{{ exp.end_date|default:"" }}{% endif %}</span>
+                </div>
+                <div class="min-entry-sub">{{ exp.company }}</div>
+                {% if exp.description %}<p class="min-entry-desc">{{ exp.description }}</p>{% endif %}
+                <div class="min-edit">
+                    <a href="{% url 'experience_edit' resume.pk exp.pk %}">Edit</a>
+                    <form method="post" action="{% url 'experience_delete' resume.pk exp.pk %}" style="display:inline;">
+                        {% csrf_token %}<button type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <span class="min-empty">No experience added yet.</span>
+            {% endfor %}
+        </section>
+
+        <section class="min-section">
+            <div class="min-section-title">
+                Education
+                <a href="{% url 'education_add' resume.pk %}" class="min-add">+ Add</a>
+            </div>
+            {% for edu in resume.education.all %}
+            <div class="min-entry min-editable">
+                <div class="min-entry-row">
+                    <span class="min-entry-title">{{ edu.qualification }}</span>
+                    <span class="min-entry-date">{{ edu.start_date|default:"" }} — {% if edu.is_current %}Present{% else %}{{ edu.end_date|default:"" }}{% endif %}</span>
+                </div>
+                <div class="min-entry-sub">{{ edu.institution }}</div>
+                {% if edu.description %}<p class="min-entry-desc">{{ edu.description }}</p>{% endif %}
+                <div class="min-edit">
+                    <a href="{% url 'education_edit' resume.pk edu.pk %}">Edit</a>
+                    <form method="post" action="{% url 'education_delete' resume.pk edu.pk %}" style="display:inline;">
+                        {% csrf_token %}<button type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <span class="min-empty">No education added yet.</span>
+            {% endfor %}
+        </section>
+
+        {% if resume.skills.all %}
+        <section class="min-section">
+            <div class="min-section-title">
+                Skills
+                <a href="{% url 'skill_add' resume.pk %}" class="min-add">+ Add</a>
+            </div>
+            <div class="min-inline-list">
+                {% for skill in resume.skills.all %}<span>{{ skill.name }}</span>{% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if resume.languages.all %}
+        <section class="min-section">
+            <div class="min-section-title">
+                Languages
+                <a href="{% url 'language_add' resume.pk %}" class="min-add">+ Add</a>
+            </div>
+            {% for lang in resume.languages.all %}
+            <div class="min-mini-row min-editable">
+                <span>{{ lang.name }}</span>
+                <span>{{ lang.get_proficiency_display }}
+                    <span class="min-edit">
+                        <a href="{% url 'language_edit' resume.pk lang.pk %}">Edit</a>
+                        <form method="post" action="{% url 'language_delete' resume.pk lang.pk %}" style="display:inline;">
+                            {% csrf_token %}<button type="submit">×</button>
+                        </form>
+                    </span>
+                </span>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if resume.certifications.all %}
+        <section class="min-section">
+            <div class="min-section-title">
+                Certifications
+                <a href="{% url 'certification_add' resume.pk %}" class="min-add">+ Add</a>
+            </div>
+            {% for cert in resume.certifications.all %}
+            <div class="min-mini-row min-editable">
+                <span>{{ cert.title }}{% if cert.issuer %} — {{ cert.issuer }}{% endif %}</span>
+                <span class="min-edit">
+                    <a href="{% url 'certification_edit' resume.pk cert.pk %}">Edit</a>
+                    <form method="post" action="{% url 'certification_delete' resume.pk cert.pk %}" style="display:inline;">
+                        {% csrf_token %}<button type="submit">×</button>
+                    </form>
+                </span>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if resume.hobbies.all %}
+        <section class="min-section">
+            <div class="min-section-title">
+                Hobbies
+                <a href="{% url 'hobby_add' resume.pk %}" class="min-add">+ Add</a>
+            </div>
+            <div class="min-inline-list">
+                {% for hobby in resume.hobbies.all %}<span>{{ hobby.name }}</span>{% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if resume.references.all %}
+        <section class="min-section">
+            <div class="min-section-title">
+                References
+                <a href="{% url 'reference_add' resume.pk %}" class="min-add">+ Add</a>
+            </div>
+            {% for ref in resume.references.all %}
+            <div class="min-mini-row min-editable">
+                <span>{{ ref.name }}{% if ref.relationship %}, {{ ref.relationship }}{% endif %}{% if ref.contact %} — {{ ref.contact }}{% endif %}</span>
+                <span class="min-edit">
+                    <a href="{% url 'reference_edit' resume.pk ref.pk %}">Edit</a>
+                    <form method="post" action="{% url 'reference_delete' resume.pk ref.pk %}" style="display:inline;">
+                        {% csrf_token %}<button type="submit">×</button>
+                    </form>
+                </span>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+    </div>
+
+    <div class="min-footer">Created with EasyDoesIt</div>
+
+</div>
+{% endblock %}

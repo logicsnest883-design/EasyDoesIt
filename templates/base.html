@@ -1,0 +1,352 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}EasyDoesIt | Everything Made Easier{% endblock %}</title>
+
+    <meta name="description" content="{% block meta_description %}EasyDoesIt helps you simplify everyday work with practical digital tools, CV building, education resources and financial management.{% endblock %}">
+    <meta name="theme-color" content="#0f172a">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="min-h-screen flex flex-col bg-gray-50 text-gray-800 antialiased">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="flex items-center justify-between gap-4 py-4">
+
+                <!-- BRAND -->
+                <a href="{% url 'home' %}" class="flex items-center gap-3 shrink-0">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-md">
+                        <span class="text-white text-xl font-extrabold">E</span>
+                    </div>
+
+                    <div>
+                        <span class="block text-xl font-extrabold tracking-tight text-gray-900">
+                            EasyDoes<span class="text-blue-600">It</span>
+                        </span>
+                        <span class="hidden sm:block text-xs text-gray-500 font-medium">
+                            Everything made easier
+                        </span>
+                    </div>
+                </a>
+
+                <!-- DESKTOP NAVIGATION -->
+                <nav class="flex items-center gap-3 sm:gap-5 lg:gap-7 text-sm font-semibold"
+                     aria-label="Main navigation">
+
+                    <a href="{% url 'home' %}"
+                       class="hidden sm:inline text-gray-600 hover:text-blue-600 transition">
+                        Home
+                    </a>
+
+                    <a href="/about/"
+                       class="hidden md:inline text-gray-600 hover:text-blue-600 transition">
+                        About
+                    </a>
+
+                    <a href="/contact/"
+                       class="hidden md:inline text-gray-600 hover:text-blue-600 transition">
+                        Contact
+                    </a>
+
+                    <a href="{% url 'buy_me_coffee' %}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="hidden lg:inline-flex items-center gap-2 text-amber-700 hover:text-amber-800 transition">
+                        <span>☕</span>
+                        Buy Me a Coffee
+                    </a>
+
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}"
+                           class="px-4 py-2.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
+                            Logout
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}"
+                           class="text-gray-700 hover:text-blue-600 transition">
+                            Login
+                        </a>
+
+                        <a href="{% url 'register' %}"
+                           class="px-4 py-2.5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition">
+                            Get Started
+                        </a>
+                    {% endif %}
+                </nav>
+            </div>
+
+            <!-- SECONDARY NAVIGATION -->
+            <div class="flex md:hidden items-center justify-center gap-6 border-t border-gray-100 py-3 text-sm font-medium">
+                <a href="{% url 'home' %}" class="text-gray-600 hover:text-blue-600">
+                    Home
+                </a>
+
+                <a href="/about/" class="text-gray-600 hover:text-blue-600">
+                    About
+                </a>
+
+                <a href="/contact/" class="text-gray-600 hover:text-blue-600">
+                    Contact
+                </a>
+
+                <a href="https://www.buymeacoffee.com/YOUR_USERNAME"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="text-amber-700 hover:text-amber-800">
+                    ☕ Support
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="mt-12 bg-slate-950 text-gray-300">
+
+        <!-- FOOTER MAIN CONTENT -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+                <!-- BRAND AND DESCRIPTION -->
+                <div>
+                    <a href="{% url 'home' %}" class="inline-flex items-center gap-3 mb-5">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                            <span class="text-white text-xl font-extrabold">E</span>
+                        </div>
+
+                        <span class="text-xl font-extrabold text-white">
+                            EasyDoes<span class="text-blue-400">It</span>
+                        </span>
+                    </a>
+
+                    <p class="text-sm leading-7 text-gray-400 max-w-sm">
+                        Making everyday tasks easier with simple, practical digital tools.
+                        Create professional CVs, explore educational resources and manage
+                        your finances in one convenient place.
+                    </p>
+                </div>
+
+
+                <!-- QUICK LINKS -->
+                <div>
+                    <h3 class="text-white font-bold text-base mb-5">Quick Links</h3>
+
+                    <ul class="space-y-3 text-sm">
+                        <li>
+                            <a href="{% url 'home' %}" class="hover:text-blue-400 transition">
+                                Home
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/about/" class="hover:text-blue-400 transition">
+                                About Us
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/contact/" class="hover:text-blue-400 transition">
+                                Contact Us
+                            </a>
+                        </li>
+
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a href="{% url 'logout' %}" class="hover:text-blue-400 transition">
+                                    Logout
+                                </a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{% url 'login' %}" class="hover:text-blue-400 transition">
+                                    Login
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'register' %}" class="hover:text-blue-400 transition">
+                                    Create an Account
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+
+                <!-- OUR TOOLS -->
+                <div>
+                    <h3 class="text-white font-bold text-base mb-5">Explore EasyDoesIt</h3>
+
+                    <ul class="space-y-3 text-sm">
+                        <li>
+                            <a href="{% url 'home' %}" class="hover:text-blue-400 transition">
+                                CV Builder
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'home' %}" class="hover:text-blue-400 transition">
+                                Education Tools
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'home' %}" class="hover:text-blue-400 transition">
+                                Financial Management
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
+                <!-- SUPPORT -->
+                <div>
+                    <h3 class="text-white font-bold text-base mb-5">Support Our Work</h3>
+
+                    <p class="text-sm leading-6 text-gray-400 mb-5">
+                        Enjoy using EasyDoesIt? Help support its development and make it
+                        possible to build more useful tools.
+                    </p>
+
+                    <a href="{% url 'buy_me_coffee' %}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-400 text-slate-950 font-bold text-sm hover:bg-amber-300 transition shadow-lg">
+                        <span class="text-lg">☕</span>
+                        Buy Me a Coffee
+                    </a>
+
+                    <p class="text-xs text-gray-500 mt-3">
+                        Every contribution is appreciated.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- FOOTER BOTTOM BAR -->
+        <div class="border-t border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+
+                    <p class="text-center md:text-left">
+                        &copy; {% now "Y" %} EasyDoesIt. All rights reserved.
+                    </p>
+
+                    <div class="flex flex-wrap justify-center items-center gap-5">
+                        <a href="/privacy/" class="hover:text-white transition">
+                            Privacy Policy
+                        </a>
+
+                        <a href="/terms/" class="hover:text-white transition">
+                            Terms of Service
+                        </a>
+
+                        <a href="/contact/" class="hover:text-white transition">
+                            Contact
+                        </a>
+                    </div>
+
+                    <p class="text-center">
+                        Built to make life easier.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </footer>
+
+
+    <!-- PDF DOWNLOAD LOADING OVERLAY -->
+    <div id="pdf-loading-overlay"
+         style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.65); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+
+        <div style="background:#fff; border-radius:18px; padding:32px 40px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.3); font-family:Arial,sans-serif; max-width:360px; width:100%;">
+
+            <div style="width:42px; height:42px; border:4px solid #e2e8f0; border-top-color:#2563eb; border-radius:50%; margin:0 auto 16px; animation:pdf-spin 0.8s linear infinite;"></div>
+
+            <p style="margin:0; font-weight:700; color:#1e293b; font-size:15px;">
+                Generating your PDF...
+            </p>
+
+            <p style="margin:7px 0 0; color:#64748b; font-size:12px;">
+                This usually takes a few seconds.
+            </p>
+        </div>
+    </div>
+
+
+    <style>
+        @keyframes pdf-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+
+    <script>
+        async function downloadResumePDF(url, filename) {
+            const overlay = document.getElementById('pdf-loading-overlay');
+
+            if (overlay) {
+                overlay.style.display = 'flex';
+            }
+
+            try {
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate PDF');
+                }
+
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = filename;
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(blobUrl);
+                }, 1000);
+
+            } catch (err) {
+                alert('Sorry, something went wrong generating the PDF. Please try again.');
+            } finally {
+                if (overlay) {
+                    overlay.style.display = 'none';
+                }
+            }
+        }
+    </script>
+
+    {% block extra_scripts %}{% endblock %}
+
+</body>
+</html>

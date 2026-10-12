@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} | EasyDoesIt{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl">
+
+        <div class="mb-6">
+            <a href="{% url 'finance:savings_goals' %}"
+               class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-indigo-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/>
+                </svg>
+                Back to Savings Goals
+            </a>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div class="bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-7 text-white sm:px-8">
+                <div class="flex items-center gap-4">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M12 8c-1.657 0-3 1.343-3 3v1m0 0c0 1.657 1.343 3 3 3s3-1.343 3-3m-3-4V5m0 14v-3m7-4a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">{{ page_title }}</h1>
+                        <p class="mt-1 text-sm text-indigo-100">
+                            Set a clear target and a date to work towards.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" class="space-y-6 p-6 sm:p-8">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div>
+                    <label for="{{ form.name.id_for_label }}"
+                           class="mb-2 block text-sm font-semibold text-slate-700">
+                        Goal name
+                    </label>
+                    {{ form.name }}
+                    {% for error in form.name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                    {% endfor %}
+                    <p class="mt-1.5 text-xs text-slate-500">
+                        For example: emergency fund, school fees, or a new laptop.
+                    </p>
+                </div>
+
+                <div>
+                    <label for="{{ form.target_amount.id_for_label }}"
+                           class="mb-2 block text-sm font-semibold text-slate-700">
+                        Target amount
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-4 flex items-center text-sm font-semibold text-slate-500">
+                            K
+                        </span>
+                        {{ form.target_amount }}
+                    </div>
+                    {% for error in form.target_amount.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    <label for="{{ form.target_date.id_for_label }}"
+                           class="mb-2 block text-sm font-semibold text-slate-700">
+                        Target date <span class="font-normal text-slate-400">(optional)</span>
+                    </label>
+                    {{ form.target_date }}
+                    {% for error in form.target_date.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    <label for="{{ form.notes.id_for_label }}"
+                           class="mb-2 block text-sm font-semibold text-slate-700">
+                        Notes <span class="font-normal text-slate-400">(optional)</span>
+                    </label>
+                    {{ form.notes }}
+                    {% for error in form.notes.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                {% if goal %}
+                    <div class="rounded-xl border border-indigo-100 bg-indigo-50 px-4 py-3">
+                        <p class="text-sm font-medium text-indigo-900">Current progress</p>
+                        <p class="mt-1 text-sm text-indigo-700">
+                            K{{ goal.current_amount|floatformat:2 }} saved so far.
+                            Editing this form will not change the amount saved.
+                        </p>
+                    </div>
+                {% endif %}
+
+                <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
+                    <a href="{% url 'finance:savings_goals' %}"
+                       class="inline-flex items-center justify-center rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        {{ submit_text }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

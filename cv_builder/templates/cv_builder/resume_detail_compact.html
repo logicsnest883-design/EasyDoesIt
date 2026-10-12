@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% block title %}{{ resume.full_name }} | EasyDoesIt{% endblock %}
+
+{% block content %}
+<style>
+    .cpt-page { background: #eef0f2; padding: 30px 15px 50px; min-height: 100vh; }
+    .cpt-actions { max-width: 950px; margin: 0 auto 16px; display: flex; justify-content: space-between; align-items: center; font-family: Arial, sans-serif; }
+    .cpt-back { color: #64748b; text-decoration: none; font-size: 12px; font-weight: 600; }
+    .cpt-back:hover { color: #1e293b; }
+    .cpt-download { background: #334155; color: #fff; text-decoration: none; padding: 8px 15px; font-size: 11.5px; font-weight: 700; border-radius: 4px; }
+    .cpt-download:hover { background: #1e293b; }
+
+    .cpt-cv { max-width: 950px; margin: 0 auto; background: #fff; box-shadow: 0 15px 45px rgba(30,41,59,0.13); font-family: Arial, Helvetica, sans-serif; color: #1e293b; font-size: 11px; }
+
+    .cpt-header { padding: 22px 34px; border-bottom: 3px solid #334155; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .cpt-name { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
+    .cpt-contact { font-size: 10px; color: #64748b; text-align: right; line-height: 1.6; }
+
+    .cpt-body { display: grid; grid-template-columns: 30% 70%; }
+    .cpt-sidebar { background: #f8fafc; padding: 20px 22px; border-right: 1px solid #e2e8f0; }
+    .cpt-main { padding: 20px 30px; }
+
+    .cpt-section { margin-bottom: 18px; }
+    .cpt-section-title { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #334155; border-bottom: 1.5px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; }
+
+    .cpt-about { font-size: 10.5px; line-height: 1.55; color: #475569; margin: 0; }
+
+    .cpt-skill-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: 10px; }
+    .cpt-skill-name { color: #334155; font-weight: 600; }
+    .cpt-skill-level { color: #94a3b8; font-size: 8.5px; text-transform: uppercase; }
+
+    .cpt-lang-row { display: flex; justify-content: space-between; font-size: 10px; padding: 3px 0; border-bottom: 1px dotted #e2e8f0; }
+    .cpt-lang-row:last-child { border-bottom: none; }
+
+    .cpt-tag-group { display: flex; flex-wrap: wrap; gap: 4px; }
+    .cpt-tag { background: #e2e8f0; color: #334155; font-size: 9px; padding: 3px 8px; border-radius: 3px; }
+
+    .cpt-mini { padding: 5px 0; border-bottom: 1px dotted #e2e8f0; font-size: 10px; line-height: 1.4; }
+    .cpt-mini:last-child { border-bottom: none; }
+    .cpt-mini-sub { color: #94a3b8; font-size: 9px; }
+
+    .cpt-entry { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9; }
+    .cpt-entry:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+    .cpt-entry-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .cpt-entry-title { margin: 0; font-size: 12px; font-weight: 700; }
+    .cpt-entry-date { font-size: 9px; color: #94a3b8; white-space: nowrap; font-weight: 600; }
+    .cpt-entry-sub { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 1px; }
+    .cpt-entry-desc { font-size: 10px; line-height: 1.55; color: #475569; margin: 4px 0 0; }
+
+    .cpt-edit { opacity: 0; transition: 0.2s ease; margin-left: 6px; }
+    .cpt-editable:hover .cpt-edit { opacity: 1; }
+    .cpt-edit a, .cpt-edit button { color: #64748b; font-size: 8.5px; text-decoration: none; background: none; border: none; padding: 0; cursor: pointer; margin-right: 5px; }
+    .cpt-edit a:hover, .cpt-edit button:hover { color: #1e293b; text-decoration: underline; }
+    .cpt-add { color: #64748b; font-size: 9px; font-weight: 700; text-decoration: none; text-transform: none; }
+    .cpt-add:hover { color: #1e293b; text-decoration: underline; }
+    .cpt-empty { color: #cbd5e1; font-size: 9.5px; }
+
+    .cpt-footer { padding: 10px 34px; text-align: center; font-size: 8.5px; color: #cbd5e1; border-top: 1px solid #f1f5f9; }
+
+    @media (max-width: 750px) {
+        .cpt-body { grid-template-columns: 1fr; }
+        .cpt-header { flex-direction: column; align-items: flex-start; }
+        .cpt-contact { text-align: left; }
+    }
+
+    @media print {
+        @page { size: A4; margin: 0; }
+        html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+        .cpt-page { padding: 0 !important; }
+        .cpt-actions, .cpt-edit, .cpt-add, .cpt-footer { display: none !important; }
+        .cpt-cv { box-shadow: none !important; max-width: none !important; }
+    }
+</style>
+
+<div class="cpt-page">
+
+    <div class="cpt-actions">
+        <a href="{% url 'resume_list' %}" class="cpt-back">← Back to all resumes</a>
+        <a href="#" onclick="downloadResumePDF('{% url 'resume_pdf' resume.pk %}', '{{ resume.full_name }}_CV.pdf'); return false;" class="cv-download">↓ Download PDF</a>
+    </div>
+
+    <div class="cpt-cv">
+
+        <header class="cpt-header">
+            <h1 class="cpt-name">{{ resume.full_name }}</h1>
+            <div class="cpt-contact">
+                {% if resume.email %}{{ resume.email }}<br>{% endif %}
+                {% if resume.phone %}{{ resume.phone }}{% if resume.address %} · {{ resume.address }}{% endif %}{% elif resume.address %}{{ resume.address }}{% endif %}
+            </div>
+        </header>
+
+        <div class="cpt-body">
+
+            <aside class="cpt-sidebar">
+
+                {% if resume.summary %}
+                <section class="cpt-section">
+                    <div class="cpt-section-title">Summary</div>
+                    <p class="cpt-about">{{ resume.summary }}</p>
+                </section>
+                {% endif %}
+
+                <section class="cpt-section">
+                    <div class="cpt-section-title">Skills <a href="{% url 'skill_add' resume.pk %}" class="cpt-add">+</a></div>
+                    {% if resume.skills.all %}
+                        {% for skill in resume.skills.all %}
+                        <div class="cpt-skill-row cpt-editable">
+                            <span class="cpt-skill-name">{{ skill.name }}</span>
+                            <span class="cpt-skill-level">{{ skill.get_proficiency_display }}</span>
+                            <span class="cpt-edit">
+                                <a href="{% url 'skill_edit' resume.pk skill.pk %}">e</a>
+                                <form method="post" action="{% url 'skill_delete' resume.pk skill.pk %}" style="display:inline;">
+                                    {% csrf_token %}<button type="submit">×</button>
+                                </form>
+                            </span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <span class="cpt-empty">None added.</span>
+                    {% endif %}
+                </section>
+
+                <section class="cpt-section">
+                    <div class="cpt-section-title">Languages <a href="{% url 'language_add' resume.pk %}" class="cpt-add">+</a></div>
+                    {% if resume.languages.all %}
+                        {% for lang in resume.languages.all %}
+                        <div class="cpt-lang-row cpt-editable">
+                            <span>{{ lang.name }}</span>
+                            <span>{{ lang.get_proficiency_display }}
+                                <span class="cpt-edit">
+                                    <a href="{% url 'language_edit' resume.pk lang.pk %}">e</a>
+                                    <form method="post" action="{% url 'language_delete' resume.pk lang.pk %}" style="display:inline;">
+                                        {% csrf_token %}<button type="submit">×</button>
+                                    </form>
+                                </span>
+                            </span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <span class="cpt-empty">None added.</span>
+                    {% endif %}
+                </section>
+
+                <section class="cpt-section">
+                    <div class="cpt-section-title">Hobbies <a href="{% url 'hobby_add' resume.pk %}" class="cpt-add">+</a></div>
+                    {% if resume.hobbies.all %}
+                    <div class="cpt-tag-group">
+                        {% for hobby in resume.hobbies.all %}<span class="cpt-tag">{{ hobby.name }}</span>{% endfor %}
+                    </div>
+                    {% else %}
+                    <span class="cpt-empty">None added.</span>
+                    {% endif %}
+                </section>
+
+                <section class="cpt-section">
+                    <div class="cpt-section-title">Certifications <a href="{% url 'certification_add' resume.pk %}" class="cpt-add">+</a></div>
+                    {% if resume.certifications.all %}
+                        {% for cert in resume.certifications.all %}
+                        <div class="cpt-mini cpt-editable">
+                            {{ cert.title }}
+                            {% if cert.issuer %}<div class="cpt-mini-sub">{{ cert.issuer }}</div>{% endif %}
+                            <span class="cpt-edit">
+                                <a href="{% url 'certification_edit' resume.pk cert.pk %}">edit</a>
+                                <form method="post" action="{% url 'certification_delete' resume.pk cert.pk %}" style="display:inline;">
+                                    {% csrf_token %}<button type="submit">delete</button>
+                                </form>
+                            </span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <span class="cpt-empty">None added.</span>
+                    {% endif %}
+                </section>
+
+                <section class="cpt-section">
+                    <div class="cpt-section-title">References <a href="{% url 'reference_add' resume.pk %}" class="cpt-add">+</a></div>
+                    {% if resume.references.all %}
+                        {% for ref in resume.references.all %}
+                        <div class="cpt-mini cpt-editable">
+                            {{ ref.name }}
+                            {% if ref.relationship %}<div class="cpt-mini-sub">{{ ref.relationship }}</div>{% endif %}
+                            {% if ref.contact %}<div class="cpt-mini-sub">{{ ref.contact }}</div>{% endif %}
+                            <span class="cpt-edit">
+                                <a href="{% url 'reference_edit' resume.pk ref.pk %}">edit</a>
+                                <form method="post" action="{% url 'reference_delete' resume.pk ref.pk %}" style="display:inline;">
+                                    {% csrf_token %}<button type="submit">delete</button>
+                                </form>
+                            </span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <span class="cpt-empty">None added.</span>
+                    {% endif %}
+                </section>
+
+            </aside>
+
+            <main class="cpt-main">
+
+                <section class="cpt-section">
+                    <div class="cpt-section-title">Experience <a href="{% url 'experience_add' resume.pk %}" class="cpt-add">+ Add</a></div>
+                    {% for exp in resume.experience.all %}
+                    <div class="cpt-entry cpt-editable">
+                        <div class="cpt-entry-row">
+                            <h3 class="cpt-entry-title">{{ exp.job_title }}</h3>
+                            <span class="cpt-entry-date">{{ exp.start_date|default:"" }} – {% if exp.is_current %}Present{% else %}{{ exp.end_date|default:"" }}{% endif %}</span>
+                        </div>
+                        <div class="cpt-entry-sub">{{ exp.company }}</div>
+                        {% if exp.description %}<p class="cpt-entry-desc">{{ exp.description }}</p>{% endif %}
+                        <div class="cpt-edit">
+                            <a href="{% url 'experience_edit' resume.pk exp.pk %}">Edit</a>
+                            <form method="post" action="{% url 'experience_delete' resume.pk exp.pk %}" style="display:inline;">
+                                {% csrf_token %}<button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <span class="cpt-empty">No experience added yet.</span>
+                    {% endfor %}
+                </section>
+
+                <section class="cpt-section">
+                    <div class="cpt-section-title">Education <a href="{% url 'education_add' resume.pk %}" class="cpt-add">+ Add</a></div>
+                    {% for edu in resume.education.all %}
+                    <div class="cpt-entry cpt-editable">
+                        <div class="cpt-entry-row">
+                            <h3 class="cpt-entry-title">{{ edu.qualification }}</h3>
+                            <span class="cpt-entry-date">{{ edu.start_date|default:"" }} – {% if edu.is_current %}Present{% else %}{{ edu.end_date|default:"" }}{% endif %}</span>
+                        </div>
+                        <div class="cpt-entry-sub">{{ edu.institution }}</div>
+                        {% if edu.description %}<p class="cpt-entry-desc">{{ edu.description }}</p>{% endif %}
+                        <div class="cpt-edit">
+                            <a href="{% url 'education_edit' resume.pk edu.pk %}">Edit</a>
+                            <form method="post" action="{% url 'education_delete' resume.pk edu.pk %}" style="display:inline;">
+                                {% csrf_token %}<button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <span class="cpt-empty">No education added yet.</span>
+                    {% endfor %}
+                </section>
+
+            </main>
+        </div>
+
+        <div class="cpt-footer">Created with EasyDoesIt</div>
+
+    </div>
+</div>
+{% endblock %}

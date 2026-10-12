@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}{{ resume.full_name }} | EasyDoesIt{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white shadow p-8" style="font-family: Georgia, serif;">
+    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-4">Classic Template</p>
+
+    <div class="text-center border-b-2 border-gray-800 pb-4 mb-6">
+        {% if resume.photo %}
+            <img src="{{ resume.photo.url }}" alt="{{ resume.full_name }}" class="w-20 h-20 rounded-full object-cover mx-auto mb-3">
+        {% endif %}
+        <h1 class="text-2xl font-bold uppercase tracking-wide">{{ resume.full_name }}</h1>
+        <p class="text-sm text-gray-600 mt-1">
+            {{ resume.email }}{% if resume.phone %} | {{ resume.phone }}{% endif %}{% if resume.address %} | {{ resume.address }}{% endif %}
+        </p>
+    </div>
+
+    {% if resume.summary %}
+    <div class="mb-6">
+        <h2 class="font-bold uppercase text-sm border-b border-gray-400 mb-2 pb-1">Summary</h2>
+        <p class="text-gray-800">{{ resume.summary }}</p>
+    </div>
+    {% endif %}
+
+    <div class="mb-6">
+        <div class="flex justify-between items-center border-b border-gray-400 mb-2 pb-1">
+            <h2 class="font-bold uppercase text-sm">Education</h2>
+            <a href="{% url 'education_add' resume.pk %}" class="text-xs text-gray-500 hover:underline">+ Add</a>
+        </div>
+        {% for edu in resume.education.all %}
+            <div class="py-2 flex justify-between items-start">
+                <div>
+                    <p class="font-semibold">{{ edu.qualification }}, {{ edu.institution }}</p>
+                    <p class="text-sm text-gray-600">
+                        {{ edu.start_date|default:"" }} - {% if edu.is_current %}Present{% else %}{{ edu.end_date|default:"" }}{% endif %}
+                    </p>
+                    {% if edu.description %}<p class="text-sm text-gray-800 mt-1">{{ edu.description }}</p>{% endif %}
+                </div>
+                <div class="flex gap-2 text-xs shrink-0 ml-4">
+                    <a href="{% url 'education_edit' resume.pk edu.pk %}" class="text-gray-500 hover:underline">Edit</a>
+                    <form method="post" action="{% url 'education_delete' resume.pk edu.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-gray-500 hover:underline">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-sm text-gray-400">No education added yet.</p>
+        {% endfor %}
+    </div>
+
+    <div class="mb-6">
+        <div class="flex justify-between items-center border-b border-gray-400 mb-2 pb-1">
+            <h2 class="font-bold uppercase text-sm">Experience</h2>
+            <a href="{% url 'experience_add' resume.pk %}" class="text-xs text-gray-500 hover:underline">+ Add</a>
+        </div>
+        {% for exp in resume.experience.all %}
+            <div class="py-2 flex justify-between items-start">
+                <div>
+                    <p class="font-semibold">{{ exp.job_title }}, {{ exp.company }}</p>
+                    <p class="text-sm text-gray-600">
+                        {{ exp.start_date|default:"" }} - {% if exp.is_current %}Present{% else %}{{ exp.end_date|default:"" }}{% endif %}
+                    </p>
+                    {% if exp.description %}<p class="text-sm text-gray-800 mt-1">{{ exp.description }}</p>{% endif %}
+                </div>
+                <div class="flex gap-2 text-xs shrink-0 ml-4">
+                    <a href="{% url 'experience_edit' resume.pk exp.pk %}" class="text-gray-500 hover:underline">Edit</a>
+                    <form method="post" action="{% url 'experience_delete' resume.pk exp.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-gray-500 hover:underline">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-sm text-gray-400">No experience added yet.</p>
+        {% endfor %}
+    </div>
+    <a href="#" onclick="downloadResumePDF('{% url 'resume_pdf' resume.pk %}', '{{ resume.full_name }}_CV.pdf'); return false;" class="cv-download">↓ Download PDF</a>
+
+    <a href="{% url 'resume_list' %}" class="text-gray-600 hover:underline">← Back to all resumes</a>
+</div>
+{% endblock %}

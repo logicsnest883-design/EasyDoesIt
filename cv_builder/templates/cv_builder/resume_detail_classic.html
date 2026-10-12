@@ -1,0 +1,1622 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ resume.full_name }} | EasyDoesIt{% endblock %}
+
+{% block content %}
+
+<style>
+    /* =========================================================
+       CLASSIC CV
+       ========================================================= */
+
+    .classic-page {
+        background: #e9e7e2;
+        padding: 35px 15px 60px;
+        min-height: 100vh;
+    }
+
+    .classic-actions {
+        max-width: 1000px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .classic-back {
+        color: #57534e;
+        text-decoration: none;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .classic-back:hover {
+        color: #292524;
+    }
+
+    .classic-download {
+        background: #292524;
+        color: #fff;
+        text-decoration: none;
+        padding: 10px 17px;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        border-radius: 4px;
+        transition: 0.2s ease;
+    }
+
+    .classic-download:hover {
+        background: #44403c;
+        color: #fff;
+    }
+
+    /* =========================================================
+       PAPER
+       ========================================================= */
+
+    .classic-cv {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #fffefa;
+        box-shadow: 0 20px 60px rgba(41, 37, 36, 0.16);
+        overflow: hidden;
+        color: #292524;
+        font-family: Georgia, "Times New Roman", serif;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .classic-header {
+        padding: 52px 60px 38px;
+        text-align: center;
+        position: relative;
+    }
+
+    .classic-template-label {
+        font-family: Arial, sans-serif;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: #a08b68;
+        margin-bottom: 22px;
+    }
+
+    .classic-photo {
+        width: 105px;
+        height: 105px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto 22px;
+        filter: grayscale(100%);
+        border: 5px solid #fffefa;
+        outline: 1px solid #b8aa91;
+        outline-offset: 5px;
+    }
+
+    .classic-name {
+        margin: 0;
+        color: #211f1c;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 39px;
+        font-weight: 500;
+        line-height: 1.05;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .classic-name-rule {
+        width: 55px;
+        height: 2px;
+        background: #a08b68;
+        margin: 18px auto 14px;
+    }
+
+    .classic-contact {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0;
+        color: #57534e;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        line-height: 1.6;
+    }
+
+    .classic-contact-item {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .classic-contact-item:not(:last-child)::after {
+        content: "•";
+        color: #a08b68;
+        margin: 0 10px;
+    }
+
+    /* =========================================================
+       HEADER BORDER
+       ========================================================= */
+
+    .classic-header-border {
+        margin: 0 60px;
+        border-top: 1px solid #292524;
+        border-bottom: 1px solid #b8aa91;
+        height: 5px;
+    }
+
+    /* =========================================================
+       MAIN LAYOUT
+       ========================================================= */
+
+    .classic-body {
+        display: grid;
+        grid-template-columns: 30% 70%;
+    }
+
+    /* =========================================================
+       SIDEBAR
+       ========================================================= */
+
+    .classic-sidebar {
+        background: #f4f1ea;
+        padding: 38px 30px 45px;
+        border-right: 1px solid #d6d0c5;
+    }
+
+    .classic-main {
+        padding: 38px 48px 50px;
+    }
+
+    /* =========================================================
+       SECTIONS
+       ========================================================= */
+
+    .classic-section {
+        margin-bottom: 31px;
+    }
+
+    .classic-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .classic-section-heading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .classic-section-heading h2 {
+        margin: 0;
+        color: #292524;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        white-space: nowrap;
+    }
+
+    .classic-section-heading::after {
+        content: "";
+        flex: 1;
+        border-top: 1px solid #b8aa91;
+    }
+
+    .classic-sidebar .classic-section-heading h2 {
+        font-size: 10px;
+    }
+
+    /* =========================================================
+       SUMMARY
+       ========================================================= */
+
+    .classic-summary {
+        color: #44403c;
+        font-size: 11px;
+        line-height: 1.85;
+        text-align: justify;
+        margin: 0;
+    }
+
+    /* =========================================================
+       CONTACT SIDEBAR
+       ========================================================= */
+
+    .classic-contact-block {
+        margin-bottom: 13px;
+    }
+
+    .classic-small-label {
+        color: #a08b68;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 3px;
+    }
+
+    .classic-small-value {
+        color: #44403c;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        line-height: 1.55;
+        word-break: break-word;
+    }
+
+    /* =========================================================
+       SKILLS
+       ========================================================= */
+
+    .classic-skill {
+        margin-bottom: 12px;
+    }
+
+    .classic-skill-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 5px;
+    }
+
+    .classic-skill-name {
+        color: #292524;
+        font-family: Arial, sans-serif;
+        font-size: 9.5px;
+        font-weight: 600;
+    }
+
+    .classic-skill-level {
+        color: #78716c;
+        font-family: Arial, sans-serif;
+        font-size: 7.5px;
+    }
+
+    .classic-skill-track {
+        height: 3px;
+        background: #d9d4ca;
+        width: 100%;
+    }
+
+    .classic-skill-fill {
+        height: 100%;
+        background: #292524;
+    }
+
+    .classic-skill-fill.expert {
+        width: 100%;
+    }
+
+    .classic-skill-fill.advanced {
+        width: 82%;
+    }
+
+    .classic-skill-fill.intermediate {
+        width: 62%;
+    }
+
+    .classic-skill-fill.beginner {
+        width: 38%;
+    }
+
+    .classic-skill-fill.default {
+        width: 70%;
+    }
+
+    /* =========================================================
+       LIST ITEMS
+       ========================================================= */
+
+    .classic-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .classic-list-item {
+        color: #44403c;
+        font-family: Arial, sans-serif;
+        font-size: 9.5px;
+        line-height: 1.5;
+        padding: 6px 0;
+        border-bottom: 1px solid #ddd8ce;
+    }
+
+    .classic-list-item:last-child {
+        border-bottom: none;
+    }
+
+    .classic-list-item strong {
+        color: #292524;
+    }
+
+    /* =========================================================
+       HOBBIES
+       ========================================================= */
+
+    .classic-hobbies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .classic-hobby {
+        border: 1px solid #c8bda9;
+        padding: 5px 8px;
+        color: #57534e;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+    }
+
+    /* =========================================================
+       MAIN EXPERIENCE / EDUCATION
+       ========================================================= */
+
+    .classic-main-section {
+        margin-bottom: 38px;
+    }
+
+    .classic-main-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .classic-entry {
+        margin-bottom: 27px;
+        position: relative;
+    }
+
+    .classic-entry:last-child {
+        margin-bottom: 0;
+    }
+
+    .classic-entry-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 20px;
+        align-items: baseline;
+    }
+
+    .classic-entry-title {
+        margin: 0;
+        color: #292524;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    .classic-entry-date {
+        color: #78716c;
+        font-family: Arial, sans-serif;
+        font-size: 8.5px;
+        font-weight: 600;
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    .classic-entry-company {
+        color: #8b7654;
+        font-size: 10.5px;
+        font-style: italic;
+        margin-top: 3px;
+    }
+
+    .classic-entry-description {
+        color: #57534e;
+        font-size: 10.5px;
+        line-height: 1.75;
+        margin: 8px 0 0;
+    }
+
+    .classic-entry-line {
+        width: 28px;
+        height: 1px;
+        background: #b8aa91;
+        margin-top: 12px;
+    }
+
+    /* =========================================================
+       ABOUT
+       ========================================================= */
+
+    .classic-about {
+        color: #44403c;
+        font-size: 11px;
+        line-height: 1.85;
+        margin: 0;
+    }
+
+    /* =========================================================
+       CERTIFICATIONS
+       ========================================================= */
+
+    .classic-certification {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 8px 0;
+        border-bottom: 1px solid #e1ddd5;
+    }
+
+    .classic-certification:last-child {
+        border-bottom: none;
+    }
+
+    .classic-cert-title {
+        color: #44403c;
+        font-family: Arial, sans-serif;
+        font-size: 9.5px;
+        line-height: 1.5;
+    }
+
+    .classic-cert-issuer {
+        color: #78716c;
+        font-style: italic;
+    }
+
+    .classic-cert-date {
+        color: #78716c;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+        white-space: nowrap;
+    }
+
+    /* =========================================================
+       REFERENCES
+       ========================================================= */
+
+    .classic-reference {
+        padding: 9px 0;
+        border-bottom: 1px solid #e1ddd5;
+    }
+
+    .classic-reference:last-child {
+        border-bottom: none;
+    }
+
+    .classic-reference-name {
+        color: #292524;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .classic-reference-details {
+        color: #78716c;
+        font-family: Arial, sans-serif;
+        font-size: 8.5px;
+        line-height: 1.5;
+        margin-top: 2px;
+    }
+
+    /* =========================================================
+       EDIT CONTROLS
+       ========================================================= */
+
+    .classic-edit {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        font-family: Arial, sans-serif;
+    }
+
+    .classic-editable:hover .classic-edit {
+        opacity: 1;
+    }
+
+    .classic-edit a,
+    .classic-edit button {
+        color: #8b7654;
+        font-size: 8px;
+        text-decoration: none;
+    }
+
+    .classic-edit a:hover {
+        text-decoration: underline;
+    }
+
+    .classic-edit button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .classic-add {
+        color: #8b7654;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .classic-add:hover {
+        text-decoration: underline;
+    }
+
+    /* =========================================================
+       EMPTY
+       ========================================================= */
+
+    .classic-empty {
+        color: #a8a29e;
+        font-family: Arial, sans-serif;
+        font-size: 9px;
+        font-style: italic;
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .classic-footer {
+        border-top: 1px solid #d6d0c5;
+        padding: 14px 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background: #faf9f6;
+    }
+
+    .classic-footer-text {
+        color: #a8a29e;
+        font-size: 8px;
+    }
+
+    .classic-footer-download {
+        color: #57534e;
+        text-decoration: none;
+        font-size: 9px;
+        font-weight: 700;
+    }
+
+    .classic-footer-download:hover {
+        color: #292524;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 800px) {
+
+        .classic-body {
+            grid-template-columns: 1fr;
+        }
+
+        .classic-sidebar {
+            border-right: none;
+            border-bottom: 1px solid #d6d0c5;
+        }
+
+        .classic-header {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        .classic-header-border {
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+
+        .classic-main {
+            padding: 35px 30px 45px;
+        }
+
+        .classic-name {
+            font-size: 32px;
+        }
+    }
+
+    @media (max-width: 550px) {
+
+        .classic-page {
+            padding: 15px 7px 35px;
+        }
+
+        .classic-actions {
+            padding: 0 5px;
+        }
+
+        .classic-header {
+            padding: 35px 20px 28px;
+        }
+
+        .classic-header-border {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .classic-sidebar {
+            padding: 30px 22px;
+        }
+
+        .classic-main {
+            padding: 30px 22px 40px;
+        }
+
+        .classic-name {
+            font-size: 27px;
+            letter-spacing: 0.08em;
+        }
+
+        .classic-entry-header {
+            grid-template-columns: 1fr;
+            gap: 3px;
+        }
+
+        .classic-entry-date {
+            text-align: left;
+        }
+
+        .classic-contact-item {
+            margin-bottom: 4px;
+        }
+
+        .classic-contact-item:not(:last-child)::after {
+            display: none;
+        }
+
+        .classic-contact {
+            flex-direction: column;
+        }
+
+        .classic-footer {
+            padding: 13px 22px;
+        }
+    }
+
+    /* =========================================================
+       PRINT / PDF
+       ========================================================= */
+
+    @media print {
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #fff !important;
+        }
+
+        .classic-page {
+            padding: 0 !important;
+            background: #fff !important;
+        }
+
+        .classic-actions,
+        .classic-edit,
+        .classic-add,
+        .classic-footer-download {
+            display: none !important;
+        }
+
+        .classic-cv {
+            max-width: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .classic-body {
+            grid-template-columns: 30% 70%;
+        }
+
+        .classic-sidebar {
+            min-height: 210mm;
+        }
+
+        .classic-main {
+            min-height: 210mm;
+        }
+    }
+</style>
+
+<div class="classic-page">
+
+```
+<!-- =====================================================
+     ACTIONS
+     ===================================================== -->
+
+<div class="classic-actions">
+
+    <a
+        href="{% url 'resume_list' %}"
+        class="classic-back"
+    >
+        ← Back to all resumes
+    </a>
+
+    <a href="#" onclick="downloadResumePDF('{% url 'resume_pdf' resume.pk %}', '{{ resume.full_name }}_CV.pdf'); return false;" class="cv-download">↓ Download PDF</a>
+
+</div>
+
+
+<!-- =====================================================
+     CV PAPER
+     ===================================================== -->
+
+<div class="classic-cv">
+
+
+    <!-- =================================================
+         HEADER
+         ================================================= -->
+
+    <header class="classic-header">
+
+        <div class="classic-template-label">
+            Classic Curriculum Vitae
+        </div>
+
+
+        {% if resume.photo %}
+
+            <img
+                src="{{ resume.photo.url }}"
+                alt="{{ resume.full_name }}"
+                class="classic-photo"
+            >
+
+        {% endif %}
+
+
+        <h1 class="classic-name">
+            {{ resume.full_name }}
+        </h1>
+
+
+        <div class="classic-name-rule"></div>
+
+
+        <div class="classic-contact">
+
+            {% if resume.email %}
+
+                <span class="classic-contact-item">
+                    {{ resume.email }}
+                </span>
+
+            {% endif %}
+
+
+            {% if resume.phone %}
+
+                <span class="classic-contact-item">
+                    {{ resume.phone }}
+                </span>
+
+            {% endif %}
+
+
+            {% if resume.address %}
+
+                <span class="classic-contact-item">
+                    {{ resume.address }}
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    </header>
+
+
+    <div class="classic-header-border"></div>
+
+
+    <!-- =================================================
+         BODY
+         ================================================= -->
+
+    <div class="classic-body">
+
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside class="classic-sidebar">
+
+
+            <!-- CONTACT -->
+
+            <section class="classic-section">
+
+                <div class="classic-section-heading">
+                    <h2>Contact</h2>
+                </div>
+
+
+                {% if resume.email %}
+
+                <div class="classic-contact-block">
+
+                    <div class="classic-small-label">
+                        Email
+                    </div>
+
+                    <div class="classic-small-value">
+                        {{ resume.email }}
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if resume.phone %}
+
+                <div class="classic-contact-block">
+
+                    <div class="classic-small-label">
+                        Phone
+                    </div>
+
+                    <div class="classic-small-value">
+                        {{ resume.phone }}
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if resume.address %}
+
+                <div class="classic-contact-block">
+
+                    <div class="classic-small-label">
+                        Address
+                    </div>
+
+                    <div class="classic-small-value">
+                        {{ resume.address }}
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- =================================================
+                 SKILLS
+                 ================================================= -->
+
+            <section class="classic-section">
+
+                <div class="classic-section-heading">
+
+                    <h2>Skills</h2>
+
+                    <a
+                        href="{% url 'skill_add' resume.pk %}"
+                        class="classic-add"
+                    >
+                        + Add
+                    </a>
+
+                </div>
+
+
+                {% if resume.skills.all %}
+
+                    {% for skill in resume.skills.all %}
+
+                    <div class="classic-skill classic-editable">
+
+                        <div class="classic-skill-top">
+
+                            <span class="classic-skill-name">
+                                {{ skill.name }}
+                            </span>
+
+                            <span class="classic-skill-level">
+                                {{ skill.get_proficiency_display }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="classic-skill-track">
+
+                            {% if "expert" in skill.get_proficiency_display|lower %}
+
+                                <div class="classic-skill-fill expert"></div>
+
+                            {% elif "advanced" in skill.get_proficiency_display|lower %}
+
+                                <div class="classic-skill-fill advanced"></div>
+
+                            {% elif "intermediate" in skill.get_proficiency_display|lower %}
+
+                                <div class="classic-skill-fill intermediate"></div>
+
+                            {% elif "beginner" in skill.get_proficiency_display|lower %}
+
+                                <div class="classic-skill-fill beginner"></div>
+
+                            {% else %}
+
+                                <div class="classic-skill-fill default"></div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div
+                            class="classic-edit"
+                            style="margin-top: 4px;"
+                        >
+
+                            <a
+                                href="{% url 'skill_edit' resume.pk skill.pk %}"
+                            >
+                                Edit
+                            </a>
+
+                            <form
+                                method="post"
+                                action="{% url 'skill_delete' resume.pk skill.pk %}"
+                                style="display:inline;"
+                            >
+
+                                {% csrf_token %}
+
+                                <button type="submit">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <span class="classic-empty">
+                        No skills added yet.
+                    </span>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- =================================================
+                 LANGUAGES
+                 ================================================= -->
+
+            <section class="classic-section">
+
+                <div class="classic-section-heading">
+
+                    <h2>Languages</h2>
+
+                    <a
+                        href="{% url 'language_add' resume.pk %}"
+                        class="classic-add"
+                    >
+                        + Add
+                    </a>
+
+                </div>
+
+
+                {% if resume.languages.all %}
+
+                <ul class="classic-list">
+
+                    {% for lang in resume.languages.all %}
+
+                    <li class="classic-list-item classic-editable">
+
+                        <div style="display:flex; justify-content:space-between; gap:8px;">
+
+                            <strong>
+                                {{ lang.name }}
+                            </strong>
+
+                            <span>
+                                {{ lang.get_proficiency_display }}
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="classic-edit"
+                            style="margin-top:3px;"
+                        >
+
+                            <a
+                                href="{% url 'language_edit' resume.pk lang.pk %}"
+                            >
+                                Edit
+                            </a>
+
+                            <form
+                                method="post"
+                                action="{% url 'language_delete' resume.pk lang.pk %}"
+                                style="display:inline;"
+                            >
+
+                                {% csrf_token %}
+
+                                <button type="submit">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+                {% else %}
+
+                <span class="classic-empty">
+                    No languages added yet.
+                </span>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- =================================================
+                 HOBBIES
+                 ================================================= -->
+
+            <section class="classic-section">
+
+                <div class="classic-section-heading">
+
+                    <h2>Interests</h2>
+
+                    <a
+                        href="{% url 'hobby_add' resume.pk %}"
+                        class="classic-add"
+                    >
+                        + Add
+                    </a>
+
+                </div>
+
+
+                {% if resume.hobbies.all %}
+
+                <div class="classic-hobbies">
+
+                    {% for hobby in resume.hobbies.all %}
+
+                    <div class="classic-hobby classic-editable">
+
+                        {{ hobby.name }}
+
+                        <div class="classic-edit">
+
+                            <a
+                                href="{% url 'hobby_edit' resume.pk hobby.pk %}"
+                            >
+                                Edit
+                            </a>
+
+                            <form
+                                method="post"
+                                action="{% url 'hobby_delete' resume.pk hobby.pk %}"
+                                style="display:inline;"
+                            >
+
+                                {% csrf_token %}
+
+                                <button type="submit">
+                                    ×
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <span class="classic-empty">
+                    No hobbies added yet.
+                </span>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- =================================================
+                 CERTIFICATIONS
+                 ================================================= -->
+
+            <section class="classic-section">
+
+                <div class="classic-section-heading">
+
+                    <h2>Certifications</h2>
+
+                    <a
+                        href="{% url 'certification_add' resume.pk %}"
+                        class="classic-add"
+                    >
+                        + Add
+                    </a>
+
+                </div>
+
+
+                {% if resume.certifications.all %}
+
+                    {% for cert in resume.certifications.all %}
+
+                    <div class="classic-list-item classic-editable">
+
+                        <div>
+                            <strong>
+                                {{ cert.title }}
+                            </strong>
+                        </div>
+
+                        {% if cert.issuer %}
+
+                        <div style="color:#78716c; margin-top:2px;">
+                            {{ cert.issuer }}
+                        </div>
+
+                        {% endif %}
+
+
+                        <div
+                            class="classic-edit"
+                            style="margin-top:4px;"
+                        >
+
+                            <a
+                                href="{% url 'certification_edit' resume.pk cert.pk %}"
+                            >
+                                Edit
+                            </a>
+
+                            <form
+                                method="post"
+                                action="{% url 'certification_delete' resume.pk cert.pk %}"
+                                style="display:inline;"
+                            >
+
+                                {% csrf_token %}
+
+                                <button type="submit">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <span class="classic-empty">
+                        No certifications added yet.
+                    </span>
+
+                {% endif %}
+
+            </section>
+
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN CONTENT
+             ================================================= -->
+
+        <main class="classic-main">
+
+
+            <!-- =================================================
+                 PROFESSIONAL SUMMARY
+                 ================================================= -->
+
+            {% if resume.summary %}
+
+            <section class="classic-main-section">
+
+                <div class="classic-section-heading">
+
+                    <h2>
+                        Professional Summary
+                    </h2>
+
+                </div>
+
+                <p class="classic-about">
+                    {{ resume.summary }}
+                </p>
+
+            </section>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 EXPERIENCE
+                 ================================================= -->
+
+            <section class="classic-main-section">
+
+                <div class="classic-section-heading">
+
+                    <h2>
+                        Professional Experience
+                    </h2>
+
+                    <a
+                        href="{% url 'experience_add' resume.pk %}"
+                        class="classic-add"
+                    >
+                        + Add
+                    </a>
+
+                </div>
+
+
+                {% for exp in resume.experience.all %}
+
+                <article class="classic-entry classic-editable">
+
+                    <div class="classic-entry-header">
+
+                        <h3 class="classic-entry-title">
+                            {{ exp.job_title }}
+                        </h3>
+
+
+                        <div class="classic-entry-date">
+
+                            {{ exp.start_date|default:"" }}
+
+                            {% if exp.is_current %}
+
+                                — Present
+
+                            {% else %}
+
+                                {% if exp.end_date %}
+                                    — {{ exp.end_date }}
+                                {% endif %}
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="classic-entry-company">
+                        {{ exp.company }}
+                    </div>
+
+
+                    {% if exp.description %}
+
+                    <p class="classic-entry-description">
+                        {{ exp.description }}
+                    </p>
+
+                    {% endif %}
+
+
+                    <div class="classic-entry-line"></div>
+
+
+                    <div class="classic-edit" style="margin-top:6px;">
+
+                        <a
+                            href="{% url 'experience_edit' resume.pk exp.pk %}"
+                        >
+                            Edit
+                        </a>
+
+                        <form
+                            method="post"
+                            action="{% url 'experience_delete' resume.pk exp.pk %}"
+                            style="display:inline;"
+                        >
+
+                            {% csrf_token %}
+
+                            <button type="submit">
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </article>
+
+                {% empty %}
+
+                <p class="classic-empty">
+                    No experience added yet.
+                </p>
+
+                {% endfor %}
+
+            </section>
+
+
+            <!-- =================================================
+                 EDUCATION
+                 ================================================= -->
+
+            <section class="classic-main-section">
+
+                <div class="classic-section-heading">
+
+                    <h2>
+                        Education
+                    </h2>
+
+                    <a
+                        href="{% url 'education_add' resume.pk %}"
+                        class="classic-add"
+                    >
+                        + Add
+                    </a>
+
+                </div>
+
+
+                {% for edu in resume.education.all %}
+
+                <article class="classic-entry classic-editable">
+
+                    <div class="classic-entry-header">
+
+                        <h3 class="classic-entry-title">
+                            {{ edu.qualification }}
+                        </h3>
+
+
+                        <div class="classic-entry-date">
+
+                            {{ edu.start_date|default:"" }}
+
+                            {% if edu.is_current %}
+
+                                — Present
+
+                            {% else %}
+
+                                {% if edu.end_date %}
+                                    — {{ edu.end_date }}
+                                {% endif %}
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="classic-entry-company">
+                        {{ edu.institution }}
+                    </div>
+
+
+                    {% if edu.description %}
+
+                    <p class="classic-entry-description">
+                        {{ edu.description }}
+                    </p>
+
+                    {% endif %}
+
+
+                    <div class="classic-entry-line"></div>
+
+
+                    <div class="classic-edit" style="margin-top:6px;">
+
+                        <a
+                            href="{% url 'education_edit' resume.pk edu.pk %}"
+                        >
+                            Edit
+                        </a>
+
+                        <form
+                            method="post"
+                            action="{% url 'education_delete' resume.pk edu.pk %}"
+                            style="display:inline;"
+                        >
+
+                            {% csrf_token %}
+
+                            <button type="submit">
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </article>
+
+                {% empty %}
+
+                <p class="classic-empty">
+                    No education added yet.
+                </p>
+
+                {% endfor %}
+
+            </section>
+
+
+            <!-- =================================================
+                 REFERENCES
+                 ================================================= -->
+
+            <section class="classic-main-section">
+
+                <div class="classic-section-heading">
+
+                    <h2>
+                        References
+                    </h2>
+
+                    <a
+                        href="{% url 'reference_add' resume.pk %}"
+                        class="classic-add"
+                    >
+                        + Add
+                    </a>
+
+                </div>
+
+
+                {% if resume.references.all %}
+
+                    {% for ref in resume.references.all %}
+
+                    <div class="classic-reference classic-editable">
+
+                        <div class="classic-reference-name">
+                            {{ ref.name }}
+                        </div>
+
+
+                        <div class="classic-reference-details">
+
+                            {% if ref.relationship %}
+                                {{ ref.relationship }}
+                            {% endif %}
+
+                            {% if ref.contact %}
+
+                                {% if ref.relationship %}
+                                    &nbsp;·&nbsp;
+                                {% endif %}
+
+                                {{ ref.contact }}
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div
+                            class="classic-edit"
+                            style="margin-top:4px;"
+                        >
+
+                            <a
+                                href="{% url 'reference_edit' resume.pk ref.pk %}"
+                            >
+                                Edit
+                            </a>
+
+                            <form
+                                method="post"
+                                action="{% url 'reference_delete' resume.pk ref.pk %}"
+                                style="display:inline;"
+                            >
+
+                                {% csrf_token %}
+
+                                <button type="submit">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                <p class="classic-empty">
+                    No references added yet.
+                </p>
+
+                {% endif %}
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="classic-footer">
+
+        <span class="classic-footer-text">
+            Created with EasyDoesIt
+        </span>
+
+        <a
+            href="{% url 'resume_pdf' resume.pk %}"
+            class="classic-footer-download"
+        >
+            Download CV
+        </a>
+
+    </footer>
+
+
+</div>
+```
+
+</div>
+
+{% endblock %}
